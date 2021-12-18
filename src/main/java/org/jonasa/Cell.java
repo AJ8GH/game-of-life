@@ -1,3 +1,5 @@
+package org.jonasa;
+
 public class Cell {
     private boolean alive = true;
 

@@ -1,5 +1,9 @@
 # Game of Life
 
+[![Build Status](https://app.travis-ci.com/AJ8GH/game-of-life.svg?branch=main)](https://app.travis-ci.com/AJ8GH/game-of-life)
+[![Maintainability](https://api.codeclimate.com/v1/badges/06d103b78f8ff34fe36e/maintainability)](https://codeclimate.com/github/AJ8GH/game-of-life/maintainability)
+
+
 [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
 
 Implemented in Java
@@ -33,6 +37,6 @@ The rules continue to be applied repeatedly to create further generations.
 
 ## Classes
 
-- Cell
+- org.jonasa.Cell
 - Grid
 - UI
