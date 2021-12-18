@@ -6,9 +6,13 @@ import java.util.List;
 public class Grid {
     private final List<List<Cell>> grid;
 
-    public Grid(int rows, int columns) {
-        this.grid  = new ArrayList<>(rows);
-        initializeGrid(rows, columns);
+    public Grid(GridInitializer initializer, int rows, int columns) {
+        this.grid = new ArrayList<>(rows);
+        initializer.initialize(grid, rows, columns);
+    }
+
+    public List<List<Cell>> getGrid() {
+        return new ArrayList<>(grid);
     }
 
     public int rows() {
@@ -17,13 +21,5 @@ public class Grid {
 
     public int columns() {
         return grid.get(0).size();
-    }
-
-    private void initializeGrid(int rows, int columns) {
-        for (int i = 0; i < rows; i++) {
-            List<Cell> row = new ArrayList<>(columns);
-            for (int j = 0; j < columns; j++) row.add(new Cell());
-            grid.add(row);
-        }
     }
 }
