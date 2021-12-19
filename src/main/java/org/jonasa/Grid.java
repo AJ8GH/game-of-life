@@ -1,11 +1,12 @@
 package org.jonasa;
 
+import lombok.Generated;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Setter
@@ -31,35 +32,34 @@ public class Grid {
         grid.forEach(row -> row.forEach(Cell::tick));
     }
 
-    private Cell get(int x, int y) {
-        return grid.get(y).get(x);
-    }
-
-    private int getNeighbours(int x, int y) {
-        int prevX = (x == 0) ? columns() - 1 : x - 1;
-        int prevY = (y == 0) ? rows() - 1 : y - 1;
-        int nextX = (x == columns() - 1) ? 0 : x + 1;
-        int nextY = (y == rows() - 1) ? 0 : y + 1;
-
-        List<Cell> neighbours = new ArrayList<>();
-        neighbours.add(get(nextX, y));
-        neighbours.add(get(prevX, y));
-        neighbours.add(get(nextX, nextY));
-        neighbours.add(get(prevX, prevY));
-        neighbours.add(get(prevX, nextY));
-        neighbours.add(get(nextX, prevY));
-        neighbours.add(get(x, prevY));
-        neighbours.add(get(x, nextY));
-
-        return (int) neighbours.stream().filter(Cell::isAlive).count();
-    }
-
     public int rows() {
         return grid.size();
     }
 
     public int columns() {
         return grid.get(0).size();
+    }
+
+    private Cell get(int x, int y) {
+        return grid.get(y).get(x);
+    }
+
+    private int getNeighbours(int x, int y) {
+        int nextX = (x == columns() - 1) ? 0 : x + 1;
+        int prevX = (x == 0) ? columns() - 1 : x - 1;
+        int nextY = (y == rows() - 1) ? 0 : y + 1;
+        int prevY = (y == 0) ? rows() - 1 : y - 1;
+
+        return (int) Stream.of(
+                get(nextX, y),
+                get(prevX, y),
+                get(nextX, nextY),
+                get(prevX, prevY),
+                get(prevX, nextY),
+                get(nextX, prevY),
+                get(x, prevY),
+                get(x, nextY)
+        ).filter(Cell::isAlive).count();
     }
 
     private void initialize(int rows, int columns) {
@@ -70,6 +70,7 @@ public class Grid {
         }
     }
 
+    @Generated
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("\n");

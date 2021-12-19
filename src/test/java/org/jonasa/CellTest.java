@@ -14,6 +14,11 @@ class CellTest {
     }
 
     @Test
+    void tick() {
+
+    }
+
+    @Test
     void live() {
         cell.live();
         assertTrue(cell.isAlive());

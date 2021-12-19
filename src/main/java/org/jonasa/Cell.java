@@ -1,6 +1,7 @@
 package org.jonasa;
 
 import lombok.Data;
+import lombok.Generated;
 
 import java.util.Random;
 
@@ -24,8 +25,9 @@ public class Cell {
         this.alive = true;
     }
 
+    @Generated
     @Override
     public String toString() {
-        return isAlive() ? "1" : "0";
+        return isAlive() ? "#" : ".";
     }
 }
