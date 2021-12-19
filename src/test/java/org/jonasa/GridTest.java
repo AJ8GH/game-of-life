@@ -16,6 +16,23 @@ class GridTest {
     }
 
     @Test
+    void population() {
+        Cell liveCell = mock(Cell.class, "*");
+        when(liveCell.isAlive()).thenReturn(true);
+
+        Cell deadCell = mock(Cell.class, "*");
+        when(deadCell.isAlive()).thenReturn(false);
+
+        List<Cell> row1 = List.of(deadCell, liveCell, liveCell);
+        List<Cell> row2 = List.of(deadCell, deadCell, liveCell);
+        List<Cell> row3 = List.of(deadCell, deadCell, deadCell);
+        List<List<Cell>> cells = List.of(row1, row2, row3);
+
+        Grid grid = new Grid(cells);
+        assertEquals(3, grid.population());
+    }
+
+    @Test
     void tick_TicksEveryCell() {
         Cell cell = mock(Cell.class, "*");
         List<Cell> row = List.of(cell, cell, cell);

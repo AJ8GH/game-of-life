@@ -30,6 +30,6 @@ public class Cell {
     @Generated
     @Override
     public String toString() {
-        return isAlive() ? "*" : "-";
+        return isAlive() ? "  *  " : "     ";
     }
 }

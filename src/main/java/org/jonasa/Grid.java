@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -23,7 +24,6 @@ public class Grid {
     }
 
     public void tick() {
-        log.info(this.toString());
         for (int i = 0; i < rows(); i++) {
             for (int j = 0; j < columns(); j++) {
                 get(j, i).setNeighbours(getNeighbours(j, i));
@@ -34,6 +34,12 @@ public class Grid {
 
     public int rows() {
         return grid.size();
+    }
+
+    public long population() {
+        return grid.stream()
+                .flatMap(Collection::stream)
+                .filter(Cell::isAlive).count();
     }
 
     public int columns() {
@@ -51,12 +57,12 @@ public class Grid {
         int prevY = (y == 0) ? rows() - 1 : y - 1;
 
         return (int) Stream.of(
-                get(nextX, y),
-                get(prevX, y),
                 get(nextX, nextY),
                 get(prevX, prevY),
                 get(prevX, nextY),
                 get(nextX, prevY),
+                get(nextX, y),
+                get(prevX, y),
                 get(x, prevY),
                 get(x, nextY)
         ).filter(Cell::isAlive).count();
@@ -74,7 +80,11 @@ public class Grid {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("\n");
-        grid.forEach(row -> sb.append(row).append("\n"));
-        return sb.toString();
+        grid.forEach(row -> {
+            sb.append("|-----".repeat(columns())).append("|\n");
+            row.forEach(cell -> sb.append("|").append(cell));
+            sb.append("|\n");
+        });
+        return sb.append("|-----".repeat(columns())).append("|\n").toString();
     }
 }
