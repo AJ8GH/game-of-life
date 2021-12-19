@@ -17,7 +17,7 @@ class GridTest {
 
     @Test
     void tick_TicksEveryCell() {
-        Cell cell = mock(Cell.class);
+        Cell cell = mock(Cell.class, "*");
         List<Cell> row = List.of(cell, cell, cell);
         List<List<Cell>> cells = List.of(row, row, row);
 
@@ -29,10 +29,10 @@ class GridTest {
 
     @Test
     void tick_SetsCorrectNumberOfNeighboursForEachCell() {
-        Cell liveCell = mock(Cell.class, "1");
+        Cell liveCell = mock(Cell.class, "*");
         when(liveCell.isAlive()).thenReturn(true);
 
-        Cell deadCell = mock(Cell.class, "0");
+        Cell deadCell = mock(Cell.class, "-");
         when(deadCell.isAlive()).thenReturn(false);
 
         List<Cell> deadRow = List.of(deadCell, deadCell, deadCell, deadCell, deadCell, deadCell, deadCell);
@@ -54,22 +54,22 @@ class GridTest {
 
     @Test
     void tick_GridWrapsCorrectly() {
-        Cell liveCell = mock(Cell.class, "1");
+        Cell liveCell = mock(Cell.class, "*");
         when(liveCell.isAlive()).thenReturn(true);
 
-        Cell deadCell = mock(Cell.class, "0");
+        Cell deadCell = mock(Cell.class, "-");
         when(deadCell.isAlive()).thenReturn(false);
 
-        Cell topLeft = mock(Cell.class, "TL");
+        Cell topLeft = mock(Cell.class, "L");
         when(topLeft.isAlive()).thenReturn(true);
 
-        Cell topRight = mock(Cell.class, "TR");
+        Cell topRight = mock(Cell.class, "R");
         when(topRight.isAlive()).thenReturn(true);
 
-        Cell bottomLeft = mock(Cell.class, "BL");
+        Cell bottomLeft = mock(Cell.class, "l");
         when(bottomLeft.isAlive()).thenReturn(true);
 
-        Cell bottomRight = mock(Cell.class, "BR");
+        Cell bottomRight = mock(Cell.class, "r");
         when(bottomRight.isAlive()).thenReturn(true);
 
         List<Cell> topRow = List.of(topLeft, liveCell, deadCell, deadCell, topRight);

@@ -15,6 +15,8 @@ public class Cell {
     }
 
     public void tick() {
+        if (neighbours < 2 || neighbours > 3) die();
+        if (neighbours == 3) live();
     }
 
     public void die() {
@@ -28,6 +30,6 @@ public class Cell {
     @Generated
     @Override
     public String toString() {
-        return isAlive() ? "#" : ".";
+        return isAlive() ? "*" : "-";
     }
 }
