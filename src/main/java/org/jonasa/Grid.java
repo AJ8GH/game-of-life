@@ -53,8 +53,6 @@ public class Grid {
         neighbours.add(get(x, prevY));
         neighbours.add(get(x, nextY));
 
-        log.info(neighbours.toString());
-
         return neighbours.stream()
                 .filter(Cell::isAlive)
                 .collect(Collectors.toList());

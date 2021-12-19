@@ -1,10 +1,10 @@
 package org.jonasa;
 
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.Random;
 
-@Data
+@Getter
 public class Cell {
     private boolean alive;
 
