@@ -16,23 +16,41 @@ class GridTest {
     }
 
     @Test
-    void tick() {
-        Grid victim = new Grid(3, 3);
+    void tick_TicksEveryCell() {
+        Cell cell = mock(Cell.class);
+        List<Cell> row = List.of(cell, cell, cell);
+        List<List<Cell>> cells = List.of(row, row, row);
 
-        Cell isolatedCell = mock(Cell.class);
-        when(isolatedCell.isAlive()).thenReturn(true);
-
-        Cell deadCell = mock(Cell.class);
-        when(deadCell.isAlive()).thenReturn(false);
-
-        List<Cell> deadCellRow = List.of(deadCell, deadCell, deadCell, deadCell, deadCell);
-        List<Cell> isolatedCellRow = List.of(deadCell, deadCell, isolatedCell, deadCell, deadCell);
-        List<List<Cell>> cells = List.of(deadCellRow, deadCellRow, isolatedCellRow, deadCellRow, deadCellRow);
-
-        victim.setGrid(cells);
-
+        Grid victim = new Grid(cells);
         victim.tick();
-        verify(isolatedCell).kill();
-        verify(deadCell, never()).revive();
+
+        verify(cell, times(9)).tick();
+    }
+
+    @Test
+    void tick_SetsCorrectNumberOfNeighboursForEachCell() {
+        Cell liveCell = mock(Cell.class, "liveCell");
+        when(liveCell.isAlive()).thenReturn(true);
+        when(liveCell.toString()).thenReturn("1");
+
+        Cell deadCell = mock(Cell.class, "deadCell");
+        when(deadCell.isAlive()).thenReturn(false);
+        when(deadCell.toString()).thenReturn("0");
+
+        List<Cell> deadRow = List.of(deadCell, deadCell, deadCell, deadCell, deadCell, deadCell, deadCell);
+        List<Cell> liveRow = List.of(deadCell, deadCell, liveCell, liveCell, liveCell, deadCell, deadCell);
+        List<List<Cell>> cells = List.of(deadRow, deadRow, liveRow, liveRow, liveRow, deadRow, deadRow);
+
+        Grid victim = new Grid(cells);
+        victim.tick();
+
+        verify(deadCell, times(24)).setNeighbours(0);
+        verify(deadCell, times(4)).setNeighbours(1);
+        verify(deadCell, times(8)).setNeighbours(2);
+        verify(deadCell, times(4)).setNeighbours(3);
+
+        verify(liveCell, times(4)).setNeighbours(3);
+        verify(liveCell, times(4)).setNeighbours(5);
+        verify(liveCell, times(1)).setNeighbours(8);
     }
 }

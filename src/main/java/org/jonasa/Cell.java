@@ -1,22 +1,31 @@
 package org.jonasa;
 
-import lombok.Getter;
+import lombok.Data;
 
 import java.util.Random;
 
-@Getter
+@Data
 public class Cell {
     private boolean alive;
+    private int neighbours;
 
     public Cell() {
         this.alive = new Random().nextBoolean();
     }
 
-    public void kill() {
+    public void tick() {
+    }
+
+    public void die() {
         this.alive = false;
     }
 
-    public void revive() {
+    public void live() {
         this.alive = true;
+    }
+
+    @Override
+    public String toString() {
+        return isAlive() ? "1" : "0";
     }
 }

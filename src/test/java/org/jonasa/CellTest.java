@@ -14,20 +14,20 @@ class CellTest {
     }
 
     @Test
-    void kill() {
-        cell.revive();
+    void live() {
+        cell.live();
         assertTrue(cell.isAlive());
 
-        cell.kill();
+        cell.die();
         assertFalse(cell.isAlive());
     }
 
     @Test
-    void revive() {
-        cell.kill();
+    void die() {
+        cell.die();
         assertFalse(cell.isAlive());
 
-        cell.revive();
+        cell.live();
         assertTrue(cell.isAlive());
     }
 }
