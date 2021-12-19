@@ -1,31 +1,33 @@
 package org.jonasa;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor
 public class Game {
-    public static void main(String[] args) {
-        Grid grid = new Grid(10, 10);
-        run(grid);
+    private static final String TICK_LOG = "Generation: {}\nPopulation: {}\n{}";
+    private static final String END_LOG = "Game Over!\nScore: {} Generations";
+
+    private final Grid grid;
+
+    private int generation;
+    private String snapShot;
+
+    public void run() throws InterruptedException {
+        while (true) {
+            snapShot = grid.toString();
+            grid.tick();
+            log.info(TICK_LOG, generation++, grid.population(), grid);
+            Thread.sleep(2000);
+            if (isOver()) {
+                log.info(END_LOG, generation);
+                break;
+            }
+        }
     }
 
-    private static void run(Grid grid) {
-        String snapShot;
-        int generation = 0;
-        try {
-            while (true) {
-                snapShot = grid.toString();
-                grid.tick();
-                log.info("Generation: {}\nPopulation: {}\n{}",
-                        generation++, grid.population(), grid);
-                Thread.sleep(2000);
-                if (grid.population() == 0 || grid.toString().equals(snapShot)) {
-                    log.info("Game Over!\nScore: {} Generations", generation);
-                    break;
-                }
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private boolean isOver() {
+        return grid.population() == 0 || grid.toString().equals(snapShot);
     }
 }
