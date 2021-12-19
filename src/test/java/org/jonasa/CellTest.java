@@ -15,6 +15,7 @@ class CellTest {
 
     @Test
     void kill() {
+        cell.revive();
         assertTrue(cell.isAlive());
 
         cell.kill();

@@ -1,10 +1,15 @@
 package org.jonasa;
 
-public class Cell {
-    private boolean alive = true;
+import lombok.Data;
 
-    public boolean isAlive() {
-        return alive;
+import java.util.Random;
+
+@Data
+public class Cell {
+    private boolean alive;
+
+    public Cell() {
+        this.alive = new Random().nextBoolean();
     }
 
     public void kill() {
