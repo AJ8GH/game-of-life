@@ -2,18 +2,17 @@ package org.jonasa;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class SeederTest {
+class SeederTest {
     @Test
-    void seed() {
+    void seed_GridSize() {
         Seeder seeder = new Seeder();
-
-        List<List<Cell>> seed = seeder.seed(5, 10);
-
-        assertEquals(10, seed.size());
-        assertEquals(5, seed.get(0).size());
+        Grid grid = new Grid(new ArrayList<>());
+        seeder.seed(grid, 5, 8);
+        assertEquals(5, grid.rows());
+        assertEquals(8, grid.columns());
     }
 }

@@ -9,13 +9,6 @@ import static org.mockito.Mockito.*;
 
 class GridTest {
     @Test
-    void Grid() {
-        Grid grid = new Grid(10, 12);
-        assertEquals(10, grid.rows());
-        assertEquals(12, grid.columns());
-    }
-
-    @Test
     void population() {
         Cell liveCell = mock(Cell.class, "*");
         when(liveCell.isAlive()).thenReturn(true);
