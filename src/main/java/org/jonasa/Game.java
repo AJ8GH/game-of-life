@@ -8,17 +8,16 @@ import static java.lang.Thread.sleep;
 @Slf4j
 @RequiredArgsConstructor
 public class Game {
-    private static final int TICK_DELAY = Config.getInt("game.tickDelay");
-    private static final int ROWS = Config.getInt("game.rows");
-    private static final int COLUMNS = Config.getInt("game.columns");
-
+    private final int tickDuration = Config.getInt("game.tickDuration");
+    private final int rows = Config.getInt("game.seeder.rows");
+    private final int columns = Config.getInt("game.seeder.columns");
     private final Grid grid;
     private final Seeder seeder;
 
     private int generation;
 
     public void seed() {
-        seeder.seed(grid, ROWS, COLUMNS);
+        seeder.seed(grid, rows, columns);
     }
 
     public void run() {
@@ -27,7 +26,7 @@ public class Game {
                 grid.tick();
                 logTick();
                 if (grid.population() == 0) break;
-                sleep(TICK_DELAY);
+                sleep(tickDuration);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
