@@ -1,2 +1,2 @@
 ignore:
-  - "src/main/java/org/jonasa/Config.java"
+  - "**/Config.java"
