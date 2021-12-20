@@ -1,4 +1,7 @@
-package org.jonasa;
+package org.jonasa.util;
+
+import org.jonasa.application.Game;
+import org.jonasa.domain.Grid;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package org.jonasa;
+package org.jonasa.domain;
 
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package org.jonasa;
+package org.jonasa.domain;
 
 import lombok.Data;
 import lombok.Generated;

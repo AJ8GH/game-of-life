@@ -1,4 +1,7 @@
-package org.jonasa;
+package org.jonasa.util;
+
+import org.jonasa.domain.Cell;
+import org.jonasa.domain.Grid;
 
 import java.util.ArrayList;
 

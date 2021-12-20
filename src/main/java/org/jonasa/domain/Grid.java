@@ -1,4 +1,4 @@
-package org.jonasa;
+package org.jonasa.domain;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;

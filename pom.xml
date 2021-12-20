@@ -38,7 +38,7 @@
                 <version>0.8.6</version>
                 <configuration>
                     <excludes>
-                        <exclude>org.jonasa.Config</exclude>
+                        <exclude>org.jonasa.util.Config</exclude>
                     </excludes>
                 </configuration>
                 <executions>

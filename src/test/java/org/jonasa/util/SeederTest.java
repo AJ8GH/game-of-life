@@ -1,5 +1,6 @@
-package org.jonasa;
+package org.jonasa.util;
 
+import org.jonasa.domain.Grid;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
