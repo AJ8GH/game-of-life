@@ -11,9 +11,9 @@ public class GameTest {
         Grid grid = mock(Grid.class);
 
         Game game = new Game(grid, seeder);
-        game.seed(5, 8);
+        game.seed();
 
-        verify(seeder).seed(grid, 5, 8);
+        verify(seeder).seed(grid, 20, 20);
     }
 
     @Test

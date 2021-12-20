@@ -36,6 +36,11 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.6</version>
+                <configuration>
+                    <excludes>
+                        <exclude>org.jonasa.Config</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
