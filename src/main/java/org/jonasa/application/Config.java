@@ -4,6 +4,8 @@ import org.jonasa.domain.Grid;
 import org.jonasa.seeder.FileSeeder;
 import org.jonasa.seeder.RandomSeeder;
 import org.jonasa.seeder.Seeder;
+import org.jonasa.ui.TerminalUi;
+import org.jonasa.ui.UI;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,7 +24,7 @@ public class Config {
     }
 
     public static Game game() {
-        return new Game(grid(), getInt("game.tickDuration"));
+        return new Game(ui(), grid(), getInt("game.tickDuration"));
     }
 
     private static Seeder seeder() {
@@ -33,6 +35,10 @@ public class Config {
         return seedFromFile() ?
                 new FileSeeder(rows, columns, seedFilePath) :
                 new RandomSeeder(rows, columns);
+    }
+
+    private static UI ui() {
+        return new TerminalUi();
     }
 
     private static Grid grid() {
