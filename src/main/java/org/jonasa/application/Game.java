@@ -20,7 +20,8 @@ public class Game {
     public void run() {
         while (true) {
             ui.accept(this);
-            if (tick()) break;
+            tick();
+            if (gameOver()) break;
         }
     }
 
@@ -28,7 +29,7 @@ public class Game {
         return grid.population();
     }
 
-    private boolean tick() {
+    private void tick() {
         try {
             grid.tick();
             generation.incrementAndGet();
@@ -36,6 +37,9 @@ public class Game {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return grid.population() == 0;
+    }
+
+    private boolean gameOver() {
+        return population() == 0;
     }
 }

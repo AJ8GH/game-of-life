@@ -13,11 +13,11 @@ import static org.mockito.MockitoAnnotations.openMocks;
 public class GameTest {
     private static final int TICK_DURATION_MILLIS = 10;
 
+    private Game game;
     @Mock
     private Grid grid;
     @Mock
     private UI ui;
-    private Game game;
 
     @BeforeEach
     void setUp() {

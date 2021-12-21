@@ -15,10 +15,11 @@ public class Config {
     private static final Properties PROPS = new Properties();
     private static final String PROPS_PATH = "src/main/resources/overrides.properties";
 
-    private static final String TICK_DURATION_CONFIG = "game.tickDuration";
-    private static final String ROWS_CONFIG = "seeder.rows";
-    private static final String COLUMNS_CONFIG = "seeder.columns";
-    private static final String UI_IMPL_CONFIG = "game.ui.terminal";
+    private static final String GAME_TICK_DURATION_CONFIG = "game.tickDuration";
+    private static final String UI_IMPL_CONFIG = "ui.terminal";
+    private static final String UI_INFO_CONFIG = "ui.info";
+    private static final String SEED_ROWS_CONFIG = "seeder.rows";
+    private static final String SEED_COLUMNS_CONFIG = "seeder.columns";
     private static final String SEED_PATH_CONFIG = "seeder.filePath";
     private static final String SEED_FROM_FILE_CONFIG = "seeder.fromFile";
 
@@ -31,12 +32,12 @@ public class Config {
     }
 
     public static Game game() {
-        return new Game(ui(), grid(), getInt(TICK_DURATION_CONFIG));
+        return new Game(ui(), grid(), getInt(GAME_TICK_DURATION_CONFIG));
     }
 
     private static Seeder seeder() {
-        int rows = getInt(ROWS_CONFIG);
-        int columns = getInt(COLUMNS_CONFIG);
+        int rows = getInt(SEED_ROWS_CONFIG);
+        int columns = getInt(SEED_COLUMNS_CONFIG);
         String seedFilePath = getString(SEED_PATH_CONFIG);
 
         return getBoolean(SEED_FROM_FILE_CONFIG) ?
@@ -46,7 +47,7 @@ public class Config {
 
     private static UI ui() {
         return (getBoolean(UI_IMPL_CONFIG)) ?
-                new TerminalUi() : null;
+                new TerminalUi(getBoolean(UI_INFO_CONFIG)) : null;
     }
 
     private static Grid grid() {
