@@ -2,7 +2,6 @@ package org.jonasa.application;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jonasa.util.Config;
 
 @Slf4j
 @AllArgsConstructor

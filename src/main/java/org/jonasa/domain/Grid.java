@@ -28,16 +28,16 @@ public class Grid {
                 .filter(Cell::isAlive).count();
     }
 
+    public Cell get(int y, int x) {
+        return grid.get(y).get(x);
+    }
+
     public int rows() {
         return grid.size();
     }
 
     public int columns() {
         return grid.get(0).size();
-    }
-
-    private Cell get(int y, int x) {
-        return grid.get(y).get(x);
     }
 
     private int getNeighbours(int y, int x) {

@@ -1,16 +1,12 @@
 package org.jonasa.application;
 
 import org.jonasa.domain.Grid;
-import org.jonasa.util.Config;
-import org.jonasa.util.Seeder;
+import org.jonasa.seeder.Seeder;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 
 public class GameTest {
-    private static final int EXPECTED_ROWS = Config.getInt("game.seeder.rows");
-    private static final int EXPECTED_COLUMNS = Config.getInt("game.seeder.columns");
-
     @Test
     void seed() {
         Seeder seeder = mock(Seeder.class);
@@ -19,7 +15,7 @@ public class GameTest {
         Game game = new Game(grid, seeder);
         game.seed();
 
-        verify(seeder).seed(grid, EXPECTED_ROWS, EXPECTED_COLUMNS);
+        verify(seeder).seed(grid);
     }
 
     @Test

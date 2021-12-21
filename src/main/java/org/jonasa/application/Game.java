@@ -2,28 +2,28 @@ package org.jonasa.application;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jonasa.domain.Grid;
-import org.jonasa.util.Config;
-import org.jonasa.util.Seeder;
+import org.jonasa.seeder.Seeder;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Thread.sleep;
 
 @Slf4j
 @Getter
+@Setter
 @RequiredArgsConstructor
 public class Game {
-    private final int tickDuration = Config.getInt("game.tickDuration");
-    private final int rows = Config.getInt("game.seeder.rows");
-    private final int columns = Config.getInt("game.seeder.columns");
-
     private final Grid grid;
     private final Seeder seeder;
+    private final AtomicInteger generation = new AtomicInteger(0);
 
-    private int generation;
+    private int tickDuration = Config.getInt("game.tickDuration");
 
     public void seed() {
-        seeder.seed(grid, rows, columns);
+        seeder.seed(grid);
     }
 
     public void run() {
@@ -41,6 +41,6 @@ public class Game {
 
     private void logTick() {
         log.info("\nGeneration: {}, Population: {}{}",
-                ++generation, grid.population(), grid);
+                generation.incrementAndGet(), grid.population(), grid);
     }
 }
