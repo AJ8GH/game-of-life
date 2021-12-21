@@ -13,10 +13,17 @@ import java.util.Properties;
 
 public class Config {
     private static final Properties PROPS = new Properties();
-    private static final String FILE_PATH = "src/main/resources/overrides.properties";
+    private static final String PROPS_PATH = "src/main/resources/overrides.properties";
+
+    private static final String TICK_DURATION_CONFIG = "game.tickDuration";
+    private static final String ROWS_CONFIG = "seeder.rows";
+    private static final String COLUMNS_CONFIG = "seeder.columns";
+    private static final String UI_IMPL_CONFIG = "game.ui.terminal";
+    private static final String SEED_PATH_CONFIG = "seeder.filePath";
+    private static final String SEED_FROM_FILE_CONFIG = "seeder.fromFile";
 
     static {
-        try (FileInputStream in = new FileInputStream(FILE_PATH)) {
+        try (FileInputStream in = new FileInputStream(PROPS_PATH)) {
             PROPS.load(in);
         } catch (IOException e) {
             e.printStackTrace();
@@ -24,21 +31,22 @@ public class Config {
     }
 
     public static Game game() {
-        return new Game(ui(), grid(), getInt("game.tickDuration"));
+        return new Game(ui(), grid(), getInt(TICK_DURATION_CONFIG));
     }
 
     private static Seeder seeder() {
-        int rows = getInt("seeder.rows");
-        int columns = getInt("seeder.columns");
-        String seedFilePath = getString("seeder.filePath");
+        int rows = getInt(ROWS_CONFIG);
+        int columns = getInt(COLUMNS_CONFIG);
+        String seedFilePath = getString(SEED_PATH_CONFIG);
 
-        return seedFromFile() ?
+        return getBoolean(SEED_FROM_FILE_CONFIG) ?
                 new FileSeeder(rows, columns, seedFilePath) :
                 new RandomSeeder(rows, columns);
     }
 
     private static UI ui() {
-        return new TerminalUi();
+        return (getBoolean(UI_IMPL_CONFIG)) ?
+                new TerminalUi() : null;
     }
 
     private static Grid grid() {
@@ -49,8 +57,8 @@ public class Config {
         return (String) PROPS.get(key);
     }
 
-    private static boolean seedFromFile() {
-        return Boolean.parseBoolean(getString("seeder.fromFile"));
+    private static boolean getBoolean(String key) {
+        return Boolean.parseBoolean(getString(key));
     }
 
     private static int getInt(String key) {
