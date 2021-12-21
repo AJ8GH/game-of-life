@@ -2,7 +2,7 @@
 
 [![Build Status](https://app.travis-ci.com/AJ8GH/game-of-life.svg?branch=main)](https://app.travis-ci.com/AJ8GH/game-of-life)
 [![Maintainability](https://api.codeclimate.com/v1/badges/06d103b78f8ff34fe36e/maintainability)](https://codeclimate.com/github/AJ8GH/game-of-life/maintainability)
-[![codecov](https://codecov.io/gh/AJ8GH/game-of-life/branch/main/graph/badge.svg?token=16E8EXA7A6)](https://codecov.io/gh/AJ8GH/game-of-life)
+[![Coverage](https://codecov.io/gh/AJ8GH/game-of-life/branch/main/graph/badge.svg?token=16E8EXA7A6)](https://codecov.io/gh/AJ8GH/game-of-life)
 [![BCH compliance](https://bettercodehub.com/edge/badge/AJ8GH/game-of-life?branch=main)](https://bettercodehub.com/)
 
 [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) implemented and test driven in Java

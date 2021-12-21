@@ -9,9 +9,6 @@ public class Launcher {
     private static Game game = Config.game();
 
     public static void main(String[] args) {
-        log.info("Seeding grid...");
-        game.seed();
-
         log.info("Running Game of Life...");
         game.run();
     }

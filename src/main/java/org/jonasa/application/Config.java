@@ -1,63 +1,53 @@
 package org.jonasa.application;
 
 import org.jonasa.domain.Grid;
-import org.jonasa.seeder.Deserializer;
+import org.jonasa.seeder.FileSeeder;
+import org.jonasa.seeder.RandomSeeder;
 import org.jonasa.seeder.Seeder;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Properties;
 
 public class Config {
     private static final Properties PROPS = new Properties();
     private static final String FILE_PATH = "src/main/resources/overrides.properties";
-    private static final Deserializer DESERIALIZER;
-    private static final Seeder SEEDER;
-    private static final Grid GRID;
-    private static final Game GAME;
 
     static {
-        loadProperties();
-        GRID = new Grid(new ArrayList<>());
-        DESERIALIZER = new Deserializer();
-        SEEDER = new Seeder(DESERIALIZER);
-        GAME = new Game(GRID, SEEDER);
-    }
-
-    public static Game game() {
-        return GAME;
-    }
-
-    public static Seeder seeder() {
-        return SEEDER;
-    }
-
-    public static Grid grid() {
-        return GRID;
-    }
-
-    public static Deserializer deserializer() {
-        return DESERIALIZER;
-    }
-
-    public static boolean seedFromFile() {
-        return Boolean.parseBoolean((String) PROPS.get("seeder.seed.fromFile"));
-    }
-
-    public static String getString(String key) {
-        return (String) PROPS.get(key);
-    }
-
-    public static int getInt(String key) {
-        return Integer.parseInt(getString(key));
-    }
-
-    private static void loadProperties() {
         try (FileInputStream in = new FileInputStream(FILE_PATH)) {
             PROPS.load(in);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Game game() {
+        return new Game(grid(), getInt("game.tickDuration"));
+    }
+
+    private static Seeder seeder() {
+        int rows = getInt("seeder.rows");
+        int columns = getInt("seeder.columns");
+        String seedFilePath = getString("seeder.filePath");
+
+        return seedFromFile() ?
+                new FileSeeder(rows, columns, seedFilePath) :
+                new RandomSeeder(rows, columns);
+    }
+
+    private static Grid grid() {
+        return new Grid(seeder().seed());
+    }
+
+    private static String getString(String key) {
+        return (String) PROPS.get(key);
+    }
+
+    private static boolean seedFromFile() {
+        return Boolean.parseBoolean(getString("seeder.fromFile"));
+    }
+
+    private static int getInt(String key) {
+        return Integer.parseInt(getString(key));
     }
 }

@@ -12,10 +12,6 @@ public class IntegrationTest {
     void configLoadsCorrectly() {
         Game game = Config.game();
         assertTrue(game.getTickDuration() > 0);
-
-        assertTrue(Config.getInt("game.seeder.columns") > 0);
-        assertTrue(Config.getInt("game.seeder.rows") > 0);
-        assertTrue(Config.getInt("game.tickDuration") > 0);
-        assertNotNull(Config.getString("seeder.seed.filePath"));
+        assertNotNull(game.getGrid());
     }
 }

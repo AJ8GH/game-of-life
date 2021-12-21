@@ -12,7 +12,6 @@ class LauncherTest {
 
         Launcher.main(new String[] {});
 
-        verify(game, times(1)).seed();
         verify(game, times(1)).run();
     }
 }
