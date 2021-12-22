@@ -11,7 +11,9 @@
 
     <modules>
         <module>game</module>
+        <module>api</module>
     </modules>
+
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
