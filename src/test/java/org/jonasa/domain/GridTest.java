@@ -49,7 +49,7 @@ class GridTest {
         List<Cell> liveRow = List.of(deadCell, deadCell, liveCell, liveCell, liveCell, deadCell, deadCell);
         List<List<Cell>> cells = List.of(deadRow, deadRow, liveRow, liveRow, liveRow, deadRow, deadRow);
 
-        Grid grid = new Grid(cells);
+        Grid grid = new Grid(cells, true);
         grid.tick();
 
         verify(deadCell, times(24)).setNeighbours(0);
@@ -63,7 +63,7 @@ class GridTest {
     }
 
     @Test
-    void tick_GridWrapsCorrectly() {
+    void tick_WrapsIsTrue_GridWrapsCorrectly() {
         Cell liveCell = mock(Cell.class, "*");
         when(liveCell.isAlive()).thenReturn(true);
 
@@ -95,5 +95,46 @@ class GridTest {
         verify(bottomRight, times(1)).setNeighbours(3);
         verify(topRight, times(1)).setNeighbours(4);
         verify(bottomLeft, times(1)).setNeighbours(4);
+    }
+
+    @Test
+    void tick_WrapsIsFalse_DoesNotWrap() {
+        Cell liveCell = mock(Cell.class, "*");
+        when(liveCell.isAlive()).thenReturn(true);
+
+        Cell deadCell = mock(Cell.class, "-");
+        when(deadCell.isAlive()).thenReturn(false);
+
+        Cell topLeft = mock(Cell.class, "topLeft");
+        when(topLeft.isAlive()).thenReturn(true);
+
+        Cell topRight = mock(Cell.class, "topRight");
+        when(topRight.isAlive()).thenReturn(true);
+
+        Cell bottomLeft = mock(Cell.class, "bottomLeft");
+        when(bottomLeft.isAlive()).thenReturn(true);
+
+        Cell bottomRight = mock(Cell.class, "bottomRight");
+        when(bottomRight.isAlive()).thenReturn(true);
+
+        List<Cell> topRow = List.of(topLeft, liveCell, deadCell, deadCell, topRight);
+        List<Cell> row2 = List.of(liveCell, deadCell, deadCell, deadCell, deadCell);
+        List<Cell> deadRow = List.of(deadCell, deadCell, deadCell, liveCell, deadCell);
+        List<Cell> bottomRow = List.of(bottomLeft, deadCell, deadCell, deadCell, bottomRight);
+        List<List<Cell>> cells = List.of(topRow, row2, deadRow, deadRow, bottomRow);
+
+        Grid grid = new Grid(cells);
+        grid.tick();
+
+//        *  *  -  -  *
+//        *  -  -  -  -
+//        -  -  -  -  -
+//        -  -  -  -  -
+//        *  -  -  -  *
+
+        verify(topLeft, times(1)).setNeighbours(2);
+        verify(bottomRight, times(1)).setNeighbours(1);
+        verify(topRight, times(1)).setNeighbours(0);
+        verify(bottomLeft, times(1)).setNeighbours(0);
     }
 }

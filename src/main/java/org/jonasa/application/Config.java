@@ -16,6 +16,7 @@ public class Config {
     private static final String PROPS_PATH = "src/main/resources/overrides.properties";
 
     private static final String GAME_TICK_DURATION_CONFIG = "game.tickDuration";
+    private static final String GRID_WRAP_CONFIG = "grid.wrap";
     private static final String UI_IMPL_CONFIG = "ui.terminal";
     private static final String UI_INFO_CONFIG = "ui.info";
     private static final String SEED_ROWS_CONFIG = "seeder.rows";
@@ -51,7 +52,9 @@ public class Config {
     }
 
     private static Grid grid() {
-        return new Grid(seeder().seed());
+        Grid grid = new Grid(seeder().seed());
+        grid.setWraps(getBoolean(GRID_WRAP_CONFIG));
+        return grid;
     }
 
     private static String getString(String key) {
