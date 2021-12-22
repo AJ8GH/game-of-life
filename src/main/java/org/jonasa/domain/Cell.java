@@ -7,6 +7,9 @@ import java.util.Random;
 
 @Data
 public class Cell {
+    private static final int MIN_NEIGHBOURS = 2;
+    private static final int MAX_NEIGHBOURS = 3;
+
     private boolean alive;
     private int neighbours;
 
@@ -15,8 +18,8 @@ public class Cell {
     }
 
     public void tick() {
-        if (neighbours < 2 || neighbours > 3) die();
-        if (neighbours == 3) live();
+        if (neighbours < MIN_NEIGHBOURS || neighbours > MAX_NEIGHBOURS) die();
+        if (neighbours == MAX_NEIGHBOURS) live();
     }
 
     public void die() {
@@ -30,6 +33,6 @@ public class Cell {
     @Generated
     @Override
     public String toString() {
-        return isAlive() ? " * " : "   ";
+        return isAlive() ? " ● " : "   ";
     }
 }
