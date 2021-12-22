@@ -4,9 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.aj8gh</groupId>
+    <groupId>org.jonasa</groupId>
     <artifactId>game-of-life</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+
+    <modules>
+        <module>game</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

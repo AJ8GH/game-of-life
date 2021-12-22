@@ -13,7 +13,7 @@ import java.util.Properties;
 
 public class Config {
     private static final Properties PROPS = new Properties();
-    private static final String PROPS_PATH = "src/main/resources/overrides.properties";
+    private static final String PROPS_PATH = "src/main/resources/conf/overrides.properties";
 
     private static final String GAME_TICK_DURATION_CONFIG = "game.tickDuration";
     private static final String UI_IMPL_CONFIG = "ui.terminal";
@@ -24,21 +24,21 @@ public class Config {
     private static final String SEED_FROM_FILE_CONFIG = "seeder.fromFile";
 
     static {
-        try (FileInputStream in = new FileInputStream(PROPS_PATH)) {
+        try (FileInputStream in = new FileInputStream(getPath(PROPS_PATH))) {
             PROPS.load(in);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static Game game() {
-        return new Game(ui(), grid(), getInt(GAME_TICK_DURATION_CONFIG));
+    public static org.jonasa.application.Game game() {
+        return new org.jonasa.application.Game(ui(), grid(), getInt(GAME_TICK_DURATION_CONFIG));
     }
 
     private static Seeder seeder() {
         int rows = getInt(SEED_ROWS_CONFIG);
         int columns = getInt(SEED_COLUMNS_CONFIG);
-        String seedFilePath = getString(SEED_PATH_CONFIG);
+        String seedFilePath = getPath(getString(SEED_PATH_CONFIG));
 
         return getBoolean(SEED_FROM_FILE_CONFIG) ?
                 new FileSeeder(rows, columns, seedFilePath) :
@@ -64,5 +64,10 @@ public class Config {
 
     private static int getInt(String key) {
         return Integer.parseInt(getString(key));
+    }
+
+    private static String getPath(String path) {
+        String dir = System.getProperty("user.dir");
+        return dir.endsWith("game") ? path : "game/" + path;
     }
 }
