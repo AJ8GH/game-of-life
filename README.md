@@ -40,3 +40,46 @@ The rules continue to be applied repeatedly to create further generations.
 
 - Cell
 - Grid
+
+## Rest API endpoints:
+- `/send`
+- `/queue`
+
+### Example request body for /queue endpoint  
+```json
+{
+  "population": 5,
+  "generation": 40,
+  "grid": [
+    [
+      {"alive":false},
+      {"alive":true},
+      {"alive":true}
+    ],
+    [
+      {"alive":true},
+      {"alive":false},
+      {"alive":true}
+    ],
+    [
+      {"alive":true},
+      {"alive":false},
+      {"alive":false}
+    ]
+  ]
+}
+```
+
+### Example curl request to /queue to enqueue a gameState object
+```shell
+curl -X POST http://localhost:8080/queue \
+-H 'Content-Type: application/json' \
+-d '{"population":5,"generation":40,"grid":[[{"alive":false},{"alive":true},{"alive":true}],[{"alive":true},{"alive":false},{"alive":true}],[{"alive":true},{"alive":false},{"alive":false}]]}'
+```
+
+### Example curl request to /send to dequeue and retrieve a gameState object
+```shell
+curl -X POST http://localhost:8080/send \
+-H 'Content-Type: application/json' \
+-d '{}'
+```

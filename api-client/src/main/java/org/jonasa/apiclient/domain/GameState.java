@@ -1,10 +1,14 @@
 package org.jonasa.apiclient.domain;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class GameState {
     int population;
     int generation;

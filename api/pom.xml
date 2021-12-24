@@ -47,7 +47,7 @@
         </dependency>
         <dependency>
             <groupId>org.jonasa</groupId>
-            <artifactId>game</artifactId>
+            <artifactId>api-client</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
