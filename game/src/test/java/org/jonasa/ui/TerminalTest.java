@@ -16,7 +16,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
-class TerminalUiTest {
+class TerminalTest {
     private static final String ACTUAL_OUTPUT = "Mock Output";
     private static final String EXPECTED_OUTPUT = "Mock Output\n";
     private static final String INFO_OUTPUT = "Generation: 198, Population: 50\n";
@@ -44,11 +44,11 @@ class TerminalUiTest {
 
     @Test
     void accept_LogInfoFalse() {
-        UI commandLine = new TerminalUi(false);
+        UI ui = new Terminal(false);
         when(game.getGrid()).thenReturn(grid);
         when(grid.toString()).thenReturn(ACTUAL_OUTPUT);
 
-        commandLine.accept(game);
+        ui.accept(game);
 
         verify(game).getGrid();
         assertEquals(EXPECTED_OUTPUT, out.toString());
@@ -56,13 +56,13 @@ class TerminalUiTest {
 
     @Test
     void accept_LogInfoTrue() {
-        UI commandLine = new TerminalUi(true);
+        UI ui = new Terminal(true);
         when(game.getGrid()).thenReturn(grid);
         when(grid.toString()).thenReturn(ACTUAL_OUTPUT);
         when(game.population()).thenReturn(50L);
         when(game.getGeneration()).thenReturn(new AtomicInteger(198));
 
-        commandLine.accept(game);
+        ui.accept(game);
 
         verify(game).getGrid();
         assertEquals(EXPECTED_OUTPUT + INFO_OUTPUT, out.toString());

@@ -1,16 +1,18 @@
 package org.jonasa.apiclient.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class GameState {
-    int population;
+    long population;
     int generation;
     List<List<Cell>> grid;
 }

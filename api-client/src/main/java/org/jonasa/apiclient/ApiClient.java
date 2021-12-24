@@ -1,6 +1,7 @@
 package org.jonasa.apiclient;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jonasa.apiclient.domain.GameState;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+@Slf4j
 @RequiredArgsConstructor
 public class ApiClient {
     private static final String SCHEME = "http";
@@ -18,9 +20,14 @@ public class ApiClient {
     private final RestTemplate restTemplate;
 
     public ResponseEntity<String> queue(GameState gameState) {
-        UriComponents uri = buildUri();
-        HttpEntity<GameState> request = new HttpEntity<>(gameState);
-        return restTemplate.postForEntity(uri.toString(), request, String.class);
+        try {
+            UriComponents uri = buildUri();
+            HttpEntity<GameState> request = new HttpEntity<>(gameState);
+            return restTemplate.postForEntity(uri.toString(), request, String.class);
+        } catch (Exception e) {
+            log.error("Error connecting to API Server: {}", e.getMessage());
+        }
+        return null;
     }
 
     private UriComponents buildUri() {

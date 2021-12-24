@@ -1,11 +1,14 @@
 package org.jonasa.application;
 
+import org.jonasa.apiclient.ApiClient;
 import org.jonasa.domain.Grid;
 import org.jonasa.seeder.FileSeeder;
 import org.jonasa.seeder.RandomSeeder;
 import org.jonasa.seeder.Seeder;
-import org.jonasa.ui.TerminalUi;
+import org.jonasa.ui.Terminal;
 import org.jonasa.ui.UI;
+import org.jonasa.ui.Web;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -49,7 +52,8 @@ public class Config {
 
     private static UI ui() {
         return (getBoolean(UI_IMPL_CONFIG)) ?
-                new TerminalUi(getBoolean(UI_INFO_CONFIG)) : null;
+                new Terminal(getBoolean(UI_INFO_CONFIG)) :
+                new Web(new ApiClient(new RestTemplate()));
     }
 
     private static Grid grid() {

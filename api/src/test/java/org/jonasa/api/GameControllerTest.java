@@ -26,7 +26,8 @@ class GameControllerTest {
 
     @Test
     void send() throws Exception {
-        mockMvc.perform(post("/send"))
+        mockMvc.perform(post("/send")
+                .content("{}"))
                 .andExpect(status().is4xxClientError());
     }
 
