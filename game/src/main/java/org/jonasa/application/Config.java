@@ -16,8 +16,10 @@ public class Config {
     private static final String PROPS_PATH = "src/main/resources/conf/overrides.properties";
 
     private static final String GAME_TICK_DURATION_CONFIG = "game.tickDuration";
+
     private static final String UI_IMPL_CONFIG = "ui.terminal";
     private static final String UI_INFO_CONFIG = "ui.info";
+
     private static final String SEED_ROWS_CONFIG = "seeder.rows";
     private static final String SEED_COLUMNS_CONFIG = "seeder.columns";
     private static final String SEED_PATH_CONFIG = "seeder.filePath";
@@ -31,8 +33,8 @@ public class Config {
         }
     }
 
-    public static org.jonasa.application.Game game() {
-        return new org.jonasa.application.Game(ui(), grid(), getInt(GAME_TICK_DURATION_CONFIG));
+    public static Game game() {
+        return new Game(ui(), grid(), getInt(GAME_TICK_DURATION_CONFIG));
     }
 
     private static Seeder seeder() {

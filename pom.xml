@@ -12,6 +12,7 @@
     <modules>
         <module>game</module>
         <module>api</module>
+        <module>api-client</module>
     </modules>
 
     <dependencies>

@@ -21,7 +21,7 @@ public class Game {
         while (true) {
             ui.accept(this);
             tick();
-            if (gameOver()) break;
+            if (extinct()) break;
         }
     }
 
@@ -30,16 +30,16 @@ public class Game {
     }
 
     private void tick() {
+        grid.tick();
+        generation.incrementAndGet();
         try {
-            grid.tick();
-            generation.incrementAndGet();
             sleep(tickDuration);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    private boolean gameOver() {
+    private boolean extinct() {
         return population() == 0;
     }
 }
