@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @WireMockTest(httpPort = 8080)
@@ -20,25 +21,27 @@ public class ApiClientTest {
     private static final String EXPECTED_SCHEME = "http";
     private static final String EXPECTED_HOST = "localhost";
     private static final String EXPECTED_PATH = "/queue";
+
     private ApiClient apiClient;
     private ObjectMapper mapper;
+    private GameState gameState;
+    private String expectedRequestBody;
 
     @BeforeEach
-    void setUp() {
+    void setUp()  throws JsonProcessingException {
         apiClient = new ApiClient(new RestTemplate());
         mapper = new ObjectMapper();
+
+        gameState = new GameState(6, 3, List.of(List.of(
+                new Cell(false),
+                new Cell(true),
+                new Cell(true))));
+
+        expectedRequestBody = mapper.writeValueAsString(gameState);
     }
 
     @Test
-    void queue() throws JsonProcessingException {
-        List<Cell> row = List.of(
-                new Cell(false),
-                new Cell(true),
-                new Cell(true));
-        List<List<Cell>> grid = List.of(row, row, row);
-        GameState gameState = new GameState(6, 3, grid);
-        String expectedRequestBody = mapper.writeValueAsString(gameState);
-
+    void queue_Success() {
         stubFor(post(urlEqualTo(EXPECTED_PATH)).willReturn(ok()));
         ResponseEntity<String> response = apiClient.queue(gameState);
 
@@ -48,5 +51,19 @@ public class ApiClientTest {
                 .withRequestBody(equalToJson(expectedRequestBody))
                 .withPort(8080));
         assertTrue(response.getStatusCode().is2xxSuccessful());
+    }
+
+    @Test
+    void queue_NotFound() {
+        stubFor(post(urlEqualTo(EXPECTED_PATH)).willReturn(notFound()));
+        ResponseEntity<String> response = apiClient.queue(gameState);
+        assertNull(response);
+    }
+
+    @Test
+    void queue_ServerError() {
+        stubFor(post(urlEqualTo(EXPECTED_PATH)).willReturn(serverError()));
+        ResponseEntity<String> response = apiClient.queue(gameState);
+        assertNull(response);
     }
 }
