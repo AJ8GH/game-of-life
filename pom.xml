@@ -46,7 +46,7 @@
                 <version>0.8.6</version>
                 <configuration>
                     <excludes>
-                        <exclude>org.jonasa.application.Config.java</exclude>
+                        <exclude>application.org.jonasa.application.Config.java</exclude>
                     </excludes>
                 </configuration>
                 <executions>
