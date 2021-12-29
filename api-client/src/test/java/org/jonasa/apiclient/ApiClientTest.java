@@ -20,30 +20,30 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ApiClientTest {
     private static final String EXPECTED_SCHEME = "http";
     private static final String EXPECTED_HOST = "localhost";
-    private static final String EXPECTED_PATH = "/queue";
+    private static final String EXPECTED_PATH = "/enqueue";
 
     private ApiClient apiClient;
-    private ObjectMapper mapper;
+
     private GameState gameState;
     private String expectedRequestBody;
 
     @BeforeEach
     void setUp()  throws JsonProcessingException {
         apiClient = new ApiClient(new RestTemplate());
-        mapper = new ObjectMapper();
 
         gameState = new GameState(6, 3, List.of(List.of(
                 new Cell(false),
                 new Cell(true),
                 new Cell(true))));
 
+        ObjectMapper mapper = new ObjectMapper();
         expectedRequestBody = mapper.writeValueAsString(gameState);
     }
 
     @Test
-    void queue_Success() {
+    void enqueue_Success() {
         stubFor(post(urlEqualTo(EXPECTED_PATH)).willReturn(ok()));
-        ResponseEntity<String> response = apiClient.queue(gameState);
+        ResponseEntity<String> response = apiClient.enqueue(gameState);
 
         verify(postRequestedFor(urlEqualTo(EXPECTED_PATH))
                 .withScheme(EXPECTED_SCHEME)
@@ -54,16 +54,16 @@ public class ApiClientTest {
     }
 
     @Test
-    void queue_NotFound() {
+    void enqueue_NotFound() {
         stubFor(post(urlEqualTo(EXPECTED_PATH)).willReturn(notFound()));
-        ResponseEntity<String> response = apiClient.queue(gameState);
+        ResponseEntity<String> response = apiClient.enqueue(gameState);
         assertNull(response);
     }
 
     @Test
-    void queue_ServerError() {
+    void enqueue_ServerError() {
         stubFor(post(urlEqualTo(EXPECTED_PATH)).willReturn(serverError()));
-        ResponseEntity<String> response = apiClient.queue(gameState);
+        ResponseEntity<String> response = apiClient.enqueue(gameState);
         assertNull(response);
     }
 }

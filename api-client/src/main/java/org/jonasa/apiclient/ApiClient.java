@@ -15,11 +15,11 @@ public class ApiClient {
     private static final String SCHEME = "http";
     private static final String HOST = "localhost";
     private static final int PORT = 8080;
-    private static final String PATH = "/queue";
+    private static final String PATH = "/enqueue";
 
     private final RestTemplate restTemplate;
 
-    public ResponseEntity<String> queue(GameState gameState) {
+    public ResponseEntity<String> enqueue(GameState gameState) {
         try {
             UriComponents uri = buildUri();
             HttpEntity<GameState> request = new HttpEntity<>(gameState);
