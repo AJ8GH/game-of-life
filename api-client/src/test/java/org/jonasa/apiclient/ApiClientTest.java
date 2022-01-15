@@ -13,8 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @WireMockTest(httpPort = 8080)
 public class ApiClientTest {
@@ -57,12 +56,26 @@ public class ApiClientTest {
     void enqueue_NotFound() {
         stubFor(post(urlEqualTo(EXPECTED_PATH)).willReturn(notFound()));
         ResponseEntity<String> response = apiClient.enqueue(gameState);
-        assertNull(response);
+        assertTrue(response.getStatusCode().is4xxClientError());
     }
 
     @Test
     void enqueue_ServerError() {
         stubFor(post(urlEqualTo(EXPECTED_PATH)).willReturn(serverError()));
+        ResponseEntity<String> response = apiClient.enqueue(gameState);
+        assertTrue(response.getStatusCode().is5xxServerError());
+    }
+
+    @Test
+    void enqueue_BadRequest() {
+        stubFor(post(urlEqualTo(EXPECTED_PATH)).willReturn(badRequest()));
+        ResponseEntity<String> response = apiClient.enqueue(gameState);
+        assertEquals(400, response.getStatusCode().value());
+    }
+
+    @Test
+    void enqueue_OtherError() {
+        stubFor(post(urlEqualTo(EXPECTED_PATH)).willReturn(forbidden()));
         ResponseEntity<String> response = apiClient.enqueue(gameState);
         assertNull(response);
     }
