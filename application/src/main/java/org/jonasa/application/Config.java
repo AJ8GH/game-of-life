@@ -74,6 +74,8 @@ public class Config {
 
     private static String getPath(String path) {
         String dir = System.getProperty("user.dir");
-        return dir.endsWith("application") ? path : "application/" + path;
+        String base = dir.split("game-of-life/")[0];
+        return base + (base.endsWith("game-of-life") ?
+                "/application/" : "game-of-life/application/") + path;
     }
 }

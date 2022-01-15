@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 
@@ -26,7 +26,7 @@ public class GameTest {
     }
 
     @Test
-    void run_WhenPopulationIsZero_GameStops() {
+    void run_WhenPopulationIsZero_GameStops() throws InterruptedException {
         when(grid.population())
                 .thenReturn(10L)
                 .thenReturn(15L)
@@ -36,9 +36,23 @@ public class GameTest {
 
         game.run();
 
+        Thread.sleep(TICK_DURATION_MILLIS * 10);
         verify(grid, times(5)).tick();
         verify(ui, times(5)).accept(game);
         assertEquals(5, game.getGeneration().get());
+    }
+
+    @Test
+    void stop() throws InterruptedException {
+        game.run();
+        Thread.sleep(100);
+        assertTrue(game.isRunning());
+
+        game.stop();
+        Thread.sleep(100);
+        assertFalse(game.isRunning());
+
+        verify(grid, atMostOnce()).tick();
     }
 
     @Test
