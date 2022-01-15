@@ -36,9 +36,9 @@ public class GameTest {
 
         game.run();
 
-        verify(grid, times(5)).tick();
+        verify(grid, times(4)).tick();
         verify(ui, times(5)).accept(game);
-        assertEquals(5, game.getGeneration().get());
+        assertEquals(4, game.getGeneration().get());
     }
 
     @Test

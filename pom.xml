@@ -13,6 +13,7 @@
         <module>application</module>
         <module>api-gateway</module>
         <module>api-client</module>
+        <module>launcher</module>
     </modules>
 
     <dependencies>

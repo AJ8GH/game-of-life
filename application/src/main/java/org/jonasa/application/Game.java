@@ -20,8 +20,8 @@ public class Game {
     public void run() {
         while (true) {
             ui.accept(this);
-            tick();
             if (extinct()) break;
+            tick();
         }
     }
 
