@@ -43,7 +43,14 @@ public class GameTest {
     }
 
     @Test
-    void stop() throws InterruptedException {
+    void run_WhenRunning_ThrowsIllegalStateException() {
+        game.run();
+        assertTrue(game.isRunning());
+        assertThrows(IllegalStateException.class, () -> game.run());
+    }
+
+    @Test
+    void stop_WhenRunning_StopsGame() throws InterruptedException {
         game.run();
         Thread.sleep(100);
         assertTrue(game.isRunning());
@@ -53,6 +60,12 @@ public class GameTest {
         assertFalse(game.isRunning());
 
         verify(grid, atMostOnce()).tick();
+    }
+
+    @Test
+    void stop_WhenStop_ThrowsIllegalStateException() {
+        assertFalse(game.isRunning());
+        assertThrows(IllegalStateException.class, () -> game.stop());
     }
 
     @Test

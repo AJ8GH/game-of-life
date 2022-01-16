@@ -28,13 +28,13 @@ public class Game {
     private final AtomicBoolean running = new AtomicBoolean(false);
 
     public void run() {
+        if (!running.get()) {
+            this.running.getAndSet(true);
+            log.info("*** Game Started ***");
+        } else {
+            throw new IllegalStateException("Game already running");
+        }
         executor.execute(() -> {
-            if (!running.get()) {
-                this.running.getAndSet(true);
-                log.info("*** Game Started ***");
-            } else {
-                throw new IllegalStateException("Game already running");
-            }
             while (running.get()) {
                 ui.accept(this);
                 tick();
