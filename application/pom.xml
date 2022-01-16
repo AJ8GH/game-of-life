@@ -8,14 +8,14 @@
     <version>1.0-SNAPSHOT</version>
 
     <parent>
-        <groupId>org.jonasa</groupId>
+        <groupId>org.jonasa.gameoflife</groupId>
         <artifactId>game-of-life</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <dependencies>
         <dependency>
-            <groupId>org.jonasa</groupId>
+            <groupId>org.jonasa.gameoflife</groupId>
             <artifactId>api-client</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
