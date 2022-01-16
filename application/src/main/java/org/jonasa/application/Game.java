@@ -1,6 +1,5 @@
 package org.jonasa.application;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +7,6 @@ import org.jonasa.domain.Grid;
 import org.jonasa.ui.UI;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -22,9 +20,9 @@ public class Game {
     private final UI ui;
     private final Grid grid;
     private final int tickDuration;
-    private final AtomicInteger generation = new AtomicInteger(0);
     private final Executor executor = Executors.newFixedThreadPool(6);
 
+    private final AtomicInteger generation = new AtomicInteger(0);
     private final AtomicBoolean running = new AtomicBoolean(false);
 
     public void run() {

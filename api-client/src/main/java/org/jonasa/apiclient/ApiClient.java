@@ -37,9 +37,6 @@ public class ApiClient {
         } catch (HttpServerErrorException.InternalServerError e) {
             log.error("Internal Server Error: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (HttpServerErrorException.BadGateway e) {
-            log.error("Bad Gateway: {}", e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
         } catch (Exception e) {
             log.error("Error connecting to API Server: {}", e.getMessage());
             return null;
