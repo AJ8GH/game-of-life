@@ -1,5 +1,3 @@
-ignore:
-  - "**/Config.java"
 coverage:
   range: 70..90
   round: down
