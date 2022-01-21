@@ -15,13 +15,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class ApiGatewayControllerTest {
-    private final ObjectMapper mapper = new ObjectMapper();
+class QueueControllerTest {
+    private static final MediaType APPLICATION_JSON = new MediaType(
+            MediaType.APPLICATION_JSON.getType(),
+            MediaType.APPLICATION_JSON.getSubtype(),
+            StandardCharsets.UTF_8);
+
+    private ObjectMapper mapper;
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
-        ApiGatewayController controller = new ApiGatewayController(mapper);
+        mapper = new ObjectMapper();
+        QueueController controller = new QueueController(mapper);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -29,6 +35,7 @@ class ApiGatewayControllerTest {
     @Order(1)
     void dequeue_NotFound() throws Exception {
         mockMvc.perform(post("/dequeue")
+                .contentType(APPLICATION_JSON)
                 .content("{}"))
                 .andExpect(status().isNotFound());
     }
@@ -39,12 +46,13 @@ class ApiGatewayControllerTest {
         String requestBody = mapper.writeValueAsString(getRequestBody());
 
         mockMvc.perform(post("/enqueue")
-                        .contentType(new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8))
-                        .content(requestBody))
+                .contentType(APPLICATION_JSON)
+                .content(requestBody))
                 .andExpect(status().isOk());
 
         mockMvc.perform(post("/dequeue")
-                        .content("{}"))
+                .contentType(APPLICATION_JSON)
+                .content("{}"))
                 .andExpect(status().isOk());
     }
 
@@ -54,7 +62,7 @@ class ApiGatewayControllerTest {
         String requestBody = mapper.writeValueAsString(getRequestBody());
 
         mockMvc.perform(post("/enqueue")
-                .contentType(new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8))
+                .contentType(APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isOk());
     }
@@ -65,7 +73,7 @@ class ApiGatewayControllerTest {
         String requestBody = "{'BadJSON':{expecting:400}}";
 
         mockMvc.perform(post("/enqueue")
-                .contentType(new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8))
+                .contentType(APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isBadRequest());
     }

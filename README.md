@@ -83,3 +83,16 @@ curl -X POST http://localhost:8080/send \
 -H 'Content-Type: application/json' \
 -d '{}'
 ```
+
+## Profiles
+- `local`
+  _Runs game locally without start API or Spring web app_
+
+- `lazy`
+  _Starts API without starting game_
+
+- `test`
+  _Loads test properties file_
+
+To run with profile, use VM the argument: 
+`-Dspring.profiles.active=<profile>`

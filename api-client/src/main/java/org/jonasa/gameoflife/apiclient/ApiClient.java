@@ -15,10 +15,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Slf4j
 @RequiredArgsConstructor
 public class ApiClient {
-    private static final String SCHEME = "http";
-    private static final String HOST = "localhost";
-    private static final int PORT = 8080;
-    private static final String PATH = "/enqueue";
+    private final String scheme;
+    private final String host;
+    private final int port;
+    private final String path;
 
     private final RestTemplate restTemplate;
 
@@ -45,10 +45,10 @@ public class ApiClient {
 
     private UriComponents buildUri() {
         return UriComponentsBuilder.newInstance()
-                .scheme(SCHEME)
-                .host(HOST)
-                .port(PORT)
-                .path(PATH)
+                .scheme(scheme)
+                .host(host)
+                .port(port)
+                .path(path)
                 .build();
     }
 }

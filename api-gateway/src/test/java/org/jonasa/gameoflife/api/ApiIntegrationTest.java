@@ -17,11 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ApiIntegrationTest {
     private GameState gameState;
     private ObjectMapper mapper;
-    private ApiGatewayController apiGatewayController;
+    private QueueController queueController;
 
     @BeforeEach
     void setUp() {
-        apiGatewayController = new ApiGatewayController(new ObjectMapper());
+        queueController = new QueueController(new ObjectMapper());
         mapper = new ObjectMapper();
         List<Cell> row = List.of(
                 new Cell(false),
@@ -36,9 +36,9 @@ public class ApiIntegrationTest {
         stubFor(post(urlEqualTo("/queue")).willReturn(ok()));
         String requestBody = mapper.writeValueAsString(gameState);
 
-        apiGatewayController.enqueue(requestBody);
+        queueController.enqueue(requestBody);
 
-        GameState dequeued = apiGatewayController.dequeue("{}").getBody();
+        GameState dequeued = queueController.dequeue("{}").getBody();
         assertEquals(gameState, dequeued);
     }
 }

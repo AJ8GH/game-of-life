@@ -28,7 +28,8 @@ public class ApiClientTest {
 
     @BeforeEach
     void setUp()  throws JsonProcessingException {
-        apiClient = new ApiClient(new RestTemplate());
+        apiClient = new ApiClient(
+                "http", "localhost", 8080, "/enqueue", new RestTemplate());
 
         gameState = new GameState(6, 3, List.of(List.of(
                 new Cell(false),
