@@ -37,20 +37,26 @@ public class GameTest {
         game.run();
 
         Thread.sleep(TICK_DURATION_MILLIS * 10);
-        verify(grid, times(5)).tick();
+        verify(grid, times(4)).tick();
         verify(ui, times(5)).accept(game);
-        assertEquals(5, game.getGeneration().get());
+        assertEquals(4, game.getGeneration().get());
+
+        assertFalse(game.isRunning());
     }
 
     @Test
     void run_WhenRunning_ThrowsIllegalStateException() {
+        when(grid.population()).thenReturn(10L);
         game.run();
+
         assertTrue(game.isRunning());
         assertThrows(IllegalStateException.class, () -> game.run());
     }
 
     @Test
     void stop_WhenRunning_StopsGame() throws InterruptedException {
+        when(grid.population()).thenReturn(10L);
+
         game.run();
         Thread.sleep(100);
         assertTrue(game.isRunning());
@@ -58,12 +64,10 @@ public class GameTest {
         game.stop();
         Thread.sleep(100);
         assertFalse(game.isRunning());
-
-        verify(grid, atMostOnce()).tick();
     }
 
     @Test
-    void stop_WhenStop_ThrowsIllegalStateException() {
+    void stop_WhenStopped_ThrowsIllegalStateException() {
         assertFalse(game.isRunning());
         assertThrows(IllegalStateException.class, () -> game.stop());
     }

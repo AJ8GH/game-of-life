@@ -35,8 +35,11 @@ public class Game {
         executor.execute(() -> {
             while (running.get()) {
                 ui.accept(this);
+                if (extinct()) {
+                    running.getAndSet(false);
+                    break;
+                }
                 tick();
-                if (extinct()) break;
             }
         });
     }

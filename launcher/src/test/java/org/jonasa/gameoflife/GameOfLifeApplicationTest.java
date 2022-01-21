@@ -13,9 +13,9 @@ class GameOfLifeApplicationTest {
     }
 
     @Test
-    void applicationStartsAndStops() throws InterruptedException {
+    void stop_applicationStartsAndStops() throws InterruptedException {
         GameOfLifeApplication.main(new String[] {});
-        Thread.sleep(500);
+        Thread.sleep(1000);
         GameOfLifeApplication.stop();
     }
 }
