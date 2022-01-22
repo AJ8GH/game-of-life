@@ -51,7 +51,7 @@ class WebTest {
 
      return GameState.builder()
                 .population(game.population())
-                .generation(game.getGeneration().get())
+                .generation(game.getGeneration())
                 .grid(grid)
                 .build();
     }

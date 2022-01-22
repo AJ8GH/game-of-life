@@ -9,7 +9,6 @@ import org.mockito.Mock;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -60,7 +59,7 @@ class TerminalTest {
         when(game.getGrid()).thenReturn(grid);
         when(grid.toString()).thenReturn(ACTUAL_OUTPUT);
         when(game.population()).thenReturn(50L);
-        when(game.getGeneration()).thenReturn(new AtomicInteger(198));
+        when(game.getGeneration()).thenReturn(198);
 
         ui.accept(game);
 

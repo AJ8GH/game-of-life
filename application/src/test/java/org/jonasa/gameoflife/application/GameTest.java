@@ -42,7 +42,7 @@ public class GameTest {
         Thread.sleep(TICK_DURATION_MILLIS * 10);
         verify(grid, times(4)).tick();
         verify(ui, times(5)).accept(game);
-        assertEquals(4, game.getGeneration().get());
+        assertEquals(4, game.getGeneration());
 
         assertFalse(game.isRunning());
     }

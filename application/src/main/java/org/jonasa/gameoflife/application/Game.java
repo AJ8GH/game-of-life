@@ -1,6 +1,5 @@
 package org.jonasa.gameoflife.application;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jonasa.gameoflife.domain.Cell;
@@ -17,13 +16,13 @@ import static java.lang.Thread.sleep;
 
 @Slf4j
 @RequiredArgsConstructor
-@Getter
 public class Game {
+
     private final UI ui;
     private final Grid grid;
     private final int tickDuration;
-    private final Executor executor = Executors.newFixedThreadPool(6);
 
+    private final Executor executor = Executors.newFixedThreadPool(6);
     private final AtomicInteger generation = new AtomicInteger(0);
     private final AtomicBoolean running = new AtomicBoolean(false);
 
@@ -71,6 +70,14 @@ public class Game {
         }
         grid.setGrid(seed);
         log.info("*** Game Reset ***");
+    }
+
+    public Grid getGrid() {
+        return grid;
+    }
+
+    public int getGeneration() {
+        return generation.get();
     }
 
     public long population() {
