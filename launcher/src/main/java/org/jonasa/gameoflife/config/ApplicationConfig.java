@@ -9,12 +9,10 @@ import org.jonasa.gameoflife.ui.Web;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-    private final Environment env;
     private final ApiClientConfig apiClientConfig;
     private final SeederConfig seederConfig;
 

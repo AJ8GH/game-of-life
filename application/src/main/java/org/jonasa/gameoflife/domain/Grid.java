@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 @Data
 @AllArgsConstructor
 public class Grid {
-    private final List<List<Cell>> grid;
+    private List<List<Cell>> grid;
 
     public void tick() {
         for (int i = 0; i < rows(); i++) {

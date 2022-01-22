@@ -3,9 +3,11 @@ package org.jonasa.gameoflife.application;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jonasa.gameoflife.domain.Cell;
 import org.jonasa.gameoflife.domain.Grid;
 import org.jonasa.gameoflife.ui.UI;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -61,6 +63,14 @@ public class Game {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void reset(List<List<Cell>> seed) {
+        if (isRunning()) {
+            stop();
+        }
+        grid.setGrid(seed);
+        log.info("*** Game Reset ***");
     }
 
     public long population() {

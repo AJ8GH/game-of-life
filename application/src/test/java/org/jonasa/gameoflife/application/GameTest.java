@@ -1,10 +1,13 @@
 package org.jonasa.gameoflife.application;
 
+import org.jonasa.gameoflife.domain.Cell;
 import org.jonasa.gameoflife.domain.Grid;
 import org.jonasa.gameoflife.ui.UI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -77,5 +80,28 @@ public class GameTest {
         when(grid.population()).thenReturn(100L);
         assertEquals(100L, game.population());
         verify(grid).population();
+    }
+
+    @Test
+    void reset_whenStopped_ResetsGrid() {
+        assertFalse(game.isRunning());
+        List<List<Cell>> seed = List.of(List.of());
+        game.reset(seed);
+
+        verify(grid).setGrid(seed);
+        assertFalse(game.isRunning());
+    }
+
+    @Test
+    void reset_whenRunning_ResetsGridAndStopsGame() {
+        when(grid.population()).thenReturn(100L);
+        game.run();
+        assertTrue(game.isRunning());
+
+        List<List<Cell>> seed = List.of(List.of());
+        game.reset(seed);
+
+        verify(grid).setGrid(seed);
+        assertFalse(game.isRunning());
     }
 }
