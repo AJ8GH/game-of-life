@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GameState {
-    long population;
-    int generation;
-    List<List<Cell>> grid;
+    private long population;
+    private int generation;
+    private List<List<Cell>> grid;
 }

@@ -38,8 +38,8 @@ public class GameController {
     @PostMapping(value = STOP_ENDPOINT)
     public ResponseEntity<String> stop() {
         try {
-            game.stop();
             log.info("Request received at {}", STOP_ENDPOINT);
+            game.stop();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalStateException e) {
             log.error("Illegal call to {} - game already stopped", STOP_ENDPOINT);
