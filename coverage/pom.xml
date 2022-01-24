@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>game-of-life</artifactId>
-        <groupId>org.jonasa</groupId>
+        <groupId>aj8gh</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -14,22 +14,22 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.jonasa</groupId>
+            <groupId>aj8gh</groupId>
             <artifactId>launcher</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.jonasa</groupId>
+            <groupId>aj8gh</groupId>
             <artifactId>application</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.jonasa</groupId>
+            <groupId>aj8gh</groupId>
             <artifactId>api-client</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.jonasa</groupId>
+            <groupId>aj8gh</groupId>
             <artifactId>api-gateway</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

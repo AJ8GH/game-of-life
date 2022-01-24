@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="game-of-life" packages="">
+    <Appenders>
+        <Console name="ConsoleAppender">
+            <PatternLayout pattern="%style{%date{DEFAULT}}{yellow}
+              %highlight{%-5level}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green}
+              %message%n"/>
+        </Console>
+        <File name="FileAppender" fileName="log/app.log">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Root>
+        <Logger name="File" level="info">
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+    </Loggers>
+</Configuration>
+
+        <!--<?xml version="1.0" encoding="UTF-8"?>-->
+        <!--<Configuration status="WARN" xmlns:xi="http://www.w3.org/2001/XInclude">-->
+        <!--    <Appenders>-->
+        <!--        <Console name="ConsoleAppender" target="SYSTEM_OUT">-->
+        <!--            <PatternLayout pattern="%style{%date{DEFAULT}}{yellow}-->
+        <!--              %highlight{%-5level}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green}-->
+        <!--              %message%n"/>-->
+        <!--        </Console>-->
+        <!--        <File name="FileAppender" fileName="app.log">-->
+        <!--            <PatternLayout pattern="%style{%date{DEFAULT}}{yellow}-->
+        <!--              %highlight{%-5level}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green}-->
+        <!--              %message%n"/>-->
+        <!--        </File>-->
+        <!--    </Appenders>-->
+        <!--    <Loggers>-->
+        <!--        <Logger name="FILE_LOGGER" level="INFO"-->
+        <!--                additivity="false">-->
+        <!--            <AppenderRef ref="FileAppender" />-->
+        <!--        </Logger>-->
+        <!--        <Root level="INFO">-->
+        <!--            <AppenderRef ref="ConsoleAppender"/>-->
+        <!--        </Root>-->
+        <!--    </Loggers>-->
+        <!--</Configuration>-->
