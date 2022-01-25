@@ -1,6 +1,5 @@
 package aj8gh.gameoflife.seeder;
 
-import lombok.extern.slf4j.Slf4j;
 import aj8gh.gameoflife.domain.Cell;
 
 import java.io.BufferedReader;
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Slf4j
 public class FileSeeder extends AbstractSeeder {
     private final String seedFilePath;
 

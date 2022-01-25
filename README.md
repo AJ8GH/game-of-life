@@ -42,8 +42,11 @@ The rules continue to be applied repeatedly to create further generations.
 - Grid
 
 ## Rest API endpoints:
-- `/send`
-- `/queue`
+- `/enqueue`
+- `/dequeue`
+- `/start`
+- `/stop`
+- `/reset`
 
 ### Example request body for /queue endpoint  
 ```json

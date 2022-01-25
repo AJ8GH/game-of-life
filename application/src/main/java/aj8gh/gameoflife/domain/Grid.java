@@ -1,13 +1,13 @@
 package aj8gh.gameoflife.domain;
 
-import lombok.*;
-import lombok.extern.slf4j.Slf4j;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Generated;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
-@Slf4j
 @Data
 @AllArgsConstructor
 public class Grid {

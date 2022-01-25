@@ -1,11 +1,11 @@
 package aj8gh.gameoflife.api;
 
+import aj8gh.gameoflife.apiclient.domain.GameState;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import aj8gh.gameoflife.apiclient.domain.GameState;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,15 +30,15 @@ public class QueueController {
 
     @PostMapping(value = ENQUEUE_ENDPOINT, consumes = CONTENT_TYPE)
     public ResponseEntity<String> enqueue(@RequestBody String body) {
-        LOG.info("Request received at {}: {}", ENQUEUE_ENDPOINT, body);
         try {
             GameState gameState = objectMapper.readValue(body, GameState.class);
+            LOG.info("Request received at {}: {}", ENQUEUE_ENDPOINT, gameState);
             queue.add(gameState);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (JsonProcessingException e) {
             LOG.error("Exception processing JSON request body: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @CrossOrigin

@@ -1,15 +1,16 @@
 package aj8gh.gameoflife;
 
-import lombok.extern.slf4j.Slf4j;
 import aj8gh.gameoflife.application.Game;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Objects;
 
-@Slf4j
 @SpringBootApplication
 public class GameOfLifeApplication {
+    private static final Logger LOG = LogManager.getLogger(GameOfLifeApplication.class.getName());
     private static final String PROFILE = getActiveProfile();
     private static Game game;
 
@@ -29,7 +30,7 @@ public class GameOfLifeApplication {
     }
 
     private static void start() {
-        log.info("*** STARTING Game of Life ***");
+        LOG.info("*** STARTING Game of Life ***");
         game.run();
     }
 
@@ -39,7 +40,7 @@ public class GameOfLifeApplication {
 
     private static void apiLog(String message) {
         if (!Objects.equals(PROFILE, "local")) {
-            log.info("*** {} ***", message);
+            LOG.info("*** {} ***", message);
         }
     }
 }

@@ -1,10 +1,11 @@
 package aj8gh.gameoflife.application;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import aj8gh.gameoflife.domain.Cell;
 import aj8gh.gameoflife.domain.Grid;
 import aj8gh.gameoflife.ui.UI;
+import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -14,9 +15,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Thread.sleep;
 
-@Slf4j
 @RequiredArgsConstructor
 public class Game {
+    private static final Logger LOG = LogManager.getLogger(Game.class.getName());
 
     private final UI ui;
     private final Grid grid;
@@ -29,7 +30,7 @@ public class Game {
     public void run() {
         if (!running.get()) {
             this.running.getAndSet(true);
-            log.info("*** Game Started ***");
+            LOG.info("*** Game Started ***");
         } else {
             throw new IllegalStateException("Game already running");
         }
@@ -48,7 +49,7 @@ public class Game {
     public void stop() {
         if (running.get()) {
             this.running.getAndSet(false);
-            log.info("*** Game Stopped ***");
+            LOG.info("*** Game Stopped ***");
         } else {
             throw new IllegalStateException("Game already stopped");
         }
@@ -69,7 +70,7 @@ public class Game {
             stop();
         }
         grid.setGrid(seed);
-        log.info("*** Game Reset ***");
+        LOG.info("*** Game Reset ***");
     }
 
     public Grid getGrid() {

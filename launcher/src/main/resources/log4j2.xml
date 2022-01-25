@@ -1,48 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="warn" name="game-of-life" packages="">
+<Configuration status="WARN" name="game-of-life">
+
+    <Properties>
+        <Property name="APP_LOG_ROOT">./logs</Property>
+        <Property name="PATTERN">%d %c{1.} [%t] %level - %m%n</Property>
+    </Properties>
+
     <Appenders>
-        <Console name="ConsoleAppender">
-            <PatternLayout pattern="%style{%date{DEFAULT}}{yellow}
-              %highlight{%-5level}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green}
-              %message%n"/>
+        <Console name="console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${PATTERN}"/>
         </Console>
-        <File name="FileAppender" fileName="log/app.log">
-            <PatternLayout>
-                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
-            </PatternLayout>
-        </File>
+
+        <RollingFile name="serverLog" fileName="${sys:APP_LOG_ROOT}/server.log"
+                     filePattern="${sys:APP_LOG_ROOT}/server-log-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="${PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="24" modulate="true"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+        </RollingFile>
+
+        <RollingFile name="requestLog" fileName="${sys:APP_LOG_ROOT}/request.log"
+                     filePattern="${sys:APP_LOG_ROOT}/request-log-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="${PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="24" modulate="true"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+        </RollingFile>
     </Appenders>
+
     <Loggers>
-        <Root level="info">
-            <AppenderRef ref="ConsoleAppender"/>
+        <Root level="INFO">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="serverLog"/>
         </Root>
-        <Logger name="File" level="info">
-            <AppenderRef ref="FileAppender"/>
+
+        <Logger name="aj8gh.gameoflife.apiclient.ApiClient">
+            <AppenderRef ref="requestLog"/>
         </Logger>
     </Loggers>
 </Configuration>
-
-        <!--<?xml version="1.0" encoding="UTF-8"?>-->
-        <!--<Configuration status="WARN" xmlns:xi="http://www.w3.org/2001/XInclude">-->
-        <!--    <Appenders>-->
-        <!--        <Console name="ConsoleAppender" target="SYSTEM_OUT">-->
-        <!--            <PatternLayout pattern="%style{%date{DEFAULT}}{yellow}-->
-        <!--              %highlight{%-5level}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green}-->
-        <!--              %message%n"/>-->
-        <!--        </Console>-->
-        <!--        <File name="FileAppender" fileName="app.log">-->
-        <!--            <PatternLayout pattern="%style{%date{DEFAULT}}{yellow}-->
-        <!--              %highlight{%-5level}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green}-->
-        <!--              %message%n"/>-->
-        <!--        </File>-->
-        <!--    </Appenders>-->
-        <!--    <Loggers>-->
-        <!--        <Logger name="FILE_LOGGER" level="INFO"-->
-        <!--                additivity="false">-->
-        <!--            <AppenderRef ref="FileAppender" />-->
-        <!--        </Logger>-->
-        <!--        <Root level="INFO">-->
-        <!--            <AppenderRef ref="ConsoleAppender"/>-->
-        <!--        </Root>-->
-        <!--    </Loggers>-->
-        <!--</Configuration>-->
