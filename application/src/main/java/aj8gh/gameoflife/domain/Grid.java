@@ -58,8 +58,8 @@ public class Grid {
         ).filter(Cell::isAlive).count();
     }
 
-    @Override
     @Generated
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("\n");
         grid.forEach(row -> {

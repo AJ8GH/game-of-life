@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameController {
 
     private static final Logger LOG = LogManager.getLogger(GameController.class.getName());
-    private static final String START_ENDPOINT = "/start";
-    private static final String STOP_ENDPOINT = "/stop";
-    private static final String RESET_ENDPOINT = "/reset";
+    private static final String START_ENDPOINT = "/game/start";
+    private static final String STOP_ENDPOINT = "/game/stop";
+    private static final String RESET_ENDPOINT = "/game/reset";
 
     private final Game game;
     private final Seeder seeder;

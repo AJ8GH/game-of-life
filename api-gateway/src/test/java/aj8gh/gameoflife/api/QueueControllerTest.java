@@ -34,7 +34,7 @@ class QueueControllerTest {
     @Test
     @Order(1)
     void dequeue_NotFound() throws Exception {
-        mockMvc.perform(post("/dequeue")
+        mockMvc.perform(post("/queue/dequeue")
                 .contentType(APPLICATION_JSON)
                 .content("{}"))
                 .andExpect(status().isNotFound());
@@ -45,12 +45,12 @@ class QueueControllerTest {
     void dequeue_Success() throws Exception {
         String requestBody = mapper.writeValueAsString(getRequestBody());
 
-        mockMvc.perform(post("/enqueue")
+        mockMvc.perform(post("/queue/enqueue")
                 .contentType(APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(post("/dequeue")
+        mockMvc.perform(post("/queue/dequeue")
                 .contentType(APPLICATION_JSON)
                 .content("{}"))
                 .andExpect(status().isOk());
@@ -61,7 +61,7 @@ class QueueControllerTest {
     void enqueue_Success() throws Exception {
         String requestBody = mapper.writeValueAsString(getRequestBody());
 
-        mockMvc.perform(post("/enqueue")
+        mockMvc.perform(post("/queue/enqueue")
                 .contentType(APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isOk());
@@ -72,7 +72,7 @@ class QueueControllerTest {
     void enqueue_BadRequest() throws Exception {
         String requestBody = "{'BadJSON':{expecting:400}}";
 
-        mockMvc.perform(post("/enqueue")
+        mockMvc.perform(post("/queue/enqueue")
                 .contentType(APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isBadRequest());

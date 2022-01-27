@@ -33,7 +33,7 @@ public class GameControllerTest {
     void start_WhenStopped_StartsGame() throws Exception {
         doThrow(new IllegalStateException()).when(game).run();
 
-        mockMvc.perform(post("/start"))
+        mockMvc.perform(post("/game/start"))
                 .andExpect(status().isBadRequest());
 
         verify(game).run();
@@ -41,7 +41,7 @@ public class GameControllerTest {
 
     @Test
     void start_WhenRunning_ReturnsBadRequest() throws Exception {
-        mockMvc.perform(post("/start"))
+        mockMvc.perform(post("/game/start"))
                 .andExpect(status().isOk());
 
         verify(game).run();
@@ -50,7 +50,7 @@ public class GameControllerTest {
     @Test
     void reset() throws Exception {
         when(seeder.seed()).thenReturn(List.of(List.of()));
-        mockMvc.perform(post("/reset"))
+        mockMvc.perform(post("/game/reset"))
                 .andExpect(status().isOk());
 
         verify(seeder).seed();
@@ -59,7 +59,7 @@ public class GameControllerTest {
 
     @Test
     void stop_WhenRunning_StopsGame() throws Exception {
-        mockMvc.perform(post("/stop"))
+        mockMvc.perform(post("/game/stop"))
                 .andExpect(status().isOk());
 
         verify(game).stop();
@@ -69,7 +69,7 @@ public class GameControllerTest {
     void stop_WhenStopped_ReturnsBadRequest() throws Exception {
         doThrow(new IllegalStateException()).when(game).stop();
 
-        mockMvc.perform(post("/stop"))
+        mockMvc.perform(post("/game/stop"))
                 .andExpect(status().isBadRequest());
 
         verify(game).stop();

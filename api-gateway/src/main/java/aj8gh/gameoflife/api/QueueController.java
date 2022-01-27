@@ -21,8 +21,8 @@ import java.util.Queue;
 public class QueueController {
 
     private static final Logger LOG = LogManager.getLogger(QueueController.class.getName());
-    private static final String ENQUEUE_ENDPOINT = "/enqueue";
-    private static final String DEQUEUE_ENDPOINT = "/dequeue";
+    private static final String ENQUEUE_ENDPOINT = "/queue/enqueue";
+    private static final String DEQUEUE_ENDPOINT = "/queue/dequeue";
     private static final String CONTENT_TYPE = "application/json";
 
     private final Queue<GameState> queue = new ArrayDeque<>();
