@@ -1,7 +1,6 @@
-package aj8gh.gameoflife.api;
+package aj8gh.gameoflife.api.controllers;
 
 import aj8gh.gameoflife.application.Game;
-import aj8gh.gameoflife.seeder.Seeder;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +20,6 @@ public class GameController {
     private static final String RESET_ENDPOINT = "/game/reset";
 
     private final Game game;
-    private final Seeder seeder;
 
     @CrossOrigin
     @PostMapping(value = START_ENDPOINT)
@@ -53,7 +51,7 @@ public class GameController {
     @PostMapping(value = RESET_ENDPOINT)
     public ResponseEntity<String> reset() {
         LOG.info("Request received at {}", RESET_ENDPOINT);
-        game.reset(seeder.seed());
+        game.reset();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

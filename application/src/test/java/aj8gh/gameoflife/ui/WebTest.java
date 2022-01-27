@@ -5,7 +5,6 @@ import aj8gh.gameoflife.apiclient.domain.GameState;
 import aj8gh.gameoflife.application.Game;
 import aj8gh.gameoflife.domain.Cell;
 import aj8gh.gameoflife.domain.Grid;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
@@ -13,27 +12,34 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 class WebTest {
     @Mock
     ApiClient apiClient;
-
-    @BeforeEach
-    void setUp() {
-        openMocks(this);
-    }
+    @Mock
+    Game game;
+    @Mock
+    Grid grid;
+    @Mock
+    Cell deadCell;
+    @Mock
+    Cell liveCell;
 
     @Test
     void accept() {
-        UI ui = new Web(apiClient);
-        Cell liveCell = new Cell();
-        liveCell.live();
-        Cell deadCell = new Cell();
-        liveCell.die();
-        Grid grid = new Grid(List.of(List.of(liveCell), List.of(deadCell), List.of(liveCell)));
-        Game game = new Game(ui, grid, 1000);
+        openMocks(this);
+        when(liveCell.isAlive()).thenReturn(true);
+        when(deadCell.isAlive()).thenReturn(false);
+        when(grid.getGrid()).thenReturn(List.of(
+                List.of(liveCell),
+                List.of(deadCell),
+                List.of(liveCell)
+        ));
+        when(game.getGrid()).thenReturn(grid);
 
+        UI ui = new Web(apiClient);
         ui.accept(game);
 
         GameState expectedArgument = convert(game);

@@ -2,6 +2,7 @@ package aj8gh.gameoflife.application;
 
 import aj8gh.gameoflife.domain.Cell;
 import aj8gh.gameoflife.domain.Grid;
+import aj8gh.gameoflife.seeder.Seeder;
 import aj8gh.gameoflife.ui.UI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,11 +22,13 @@ public class GameTest {
     private Grid grid;
     @Mock
     private UI ui;
+    @Mock
+    private Seeder seeder;
 
     @BeforeEach
     void setUp() {
         openMocks(this);
-        game = new Game(ui, grid, TICK_DURATION_MILLIS);
+        game = new Game(ui, grid, TICK_DURATION_MILLIS, seeder);
     }
 
     @Test
@@ -86,8 +89,11 @@ public class GameTest {
     void reset_whenStopped_ResetsGrid() {
         assertFalse(game.isRunning());
         List<List<Cell>> seed = List.of(List.of());
-        game.reset(seed);
+        when(seeder.seed()).thenReturn(seed);
 
+        game.reset();
+
+        verify(seeder).seed();
         verify(grid).setGrid(seed);
         assertFalse(game.isRunning());
     }
@@ -97,9 +103,10 @@ public class GameTest {
         when(grid.population()).thenReturn(100L);
         game.run();
         assertTrue(game.isRunning());
-
         List<List<Cell>> seed = List.of(List.of());
-        game.reset(seed);
+        when(seeder.seed()).thenReturn(seed);
+
+        game.reset();
 
         verify(grid).setGrid(seed);
         assertFalse(game.isRunning());

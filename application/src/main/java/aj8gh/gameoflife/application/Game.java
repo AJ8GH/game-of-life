@@ -1,13 +1,12 @@
 package aj8gh.gameoflife.application;
 
-import aj8gh.gameoflife.domain.Cell;
 import aj8gh.gameoflife.domain.Grid;
+import aj8gh.gameoflife.seeder.Seeder;
 import aj8gh.gameoflife.ui.UI;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -15,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Thread.sleep;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class Game {
     private static final Logger LOG = LogManager.getLogger(Game.class.getName());
 
@@ -26,6 +25,8 @@ public class Game {
     private final Executor executor = Executors.newFixedThreadPool(6);
     private final AtomicInteger generation = new AtomicInteger(0);
     private final AtomicBoolean running = new AtomicBoolean(false);
+
+    private Seeder seeder;
 
     public void run() {
         if (!running.get()) {
@@ -65,16 +66,20 @@ public class Game {
         }
     }
 
-    public void reset(List<List<Cell>> seed) {
+    public void reset() {
         if (isRunning()) {
             stop();
         }
-        grid.setGrid(seed);
+        grid.setGrid(seeder.seed());
         LOG.info("*** Game Reset ***");
     }
 
     public Grid getGrid() {
         return grid;
+    }
+
+    public void setSeeder(Seeder seeder) {
+        this.seeder = seeder;
     }
 
     public int getGeneration() {

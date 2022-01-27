@@ -1,4 +1,4 @@
-package aj8gh.gameoflife.api;
+package aj8gh.gameoflife.api.controllers;
 
 import aj8gh.gameoflife.apiclient.domain.GameState;
 import com.fasterxml.jackson.core.JsonProcessingException;

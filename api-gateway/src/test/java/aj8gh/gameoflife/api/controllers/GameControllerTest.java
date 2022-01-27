@@ -1,16 +1,15 @@
-package aj8gh.gameoflife.api;
+package aj8gh.gameoflife.api.controllers;
 
+import aj8gh.gameoflife.api.controllers.GameController;
 import aj8gh.gameoflife.application.Game;
-import aj8gh.gameoflife.seeder.Seeder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.List;
-
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.openMocks;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,14 +17,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class GameControllerTest {
     @Mock
     private Game game;
-    @Mock
-    private Seeder seeder;
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
         openMocks(this);
-        GameController controller = new GameController(game, seeder);
+        GameController controller = new GameController(game);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -49,12 +46,10 @@ public class GameControllerTest {
 
     @Test
     void reset() throws Exception {
-        when(seeder.seed()).thenReturn(List.of(List.of()));
         mockMvc.perform(post("/game/reset"))
                 .andExpect(status().isOk());
 
-        verify(seeder).seed();
-        verify(game).reset(List.of(List.of()));
+        verify(game).reset();
     }
 
     @Test

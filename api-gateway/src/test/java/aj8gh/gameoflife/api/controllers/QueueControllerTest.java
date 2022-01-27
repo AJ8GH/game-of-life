@@ -1,8 +1,8 @@
-package aj8gh.gameoflife.api;
+package aj8gh.gameoflife.api.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import aj8gh.gameoflife.apiclient.domain.Cell;
 import aj8gh.gameoflife.apiclient.domain.GameState;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;

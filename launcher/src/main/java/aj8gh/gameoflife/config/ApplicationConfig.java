@@ -27,7 +27,7 @@ public class ApplicationConfig {
 
     @Bean
     public Game game() {
-        return new Game(ui(), grid(), tickDuration);
+        return new Game(ui(), grid(), tickDuration, seederConfig.seeder());
     }
 
     @Bean

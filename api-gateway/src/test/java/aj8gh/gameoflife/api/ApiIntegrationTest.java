@@ -1,5 +1,6 @@
 package aj8gh.gameoflife.api;
 
+import aj8gh.gameoflife.api.controllers.QueueController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
