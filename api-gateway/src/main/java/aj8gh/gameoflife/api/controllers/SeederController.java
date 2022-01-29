@@ -67,6 +67,9 @@ public class SeederController {
         } catch (JsonProcessingException e) {
             LOG.info("Exception processing JSON request body: {} | {}", requestBody, e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (IllegalArgumentException e) {
+            LOG.info("File not found: {} | {}", requestBody, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

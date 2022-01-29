@@ -1,17 +1,18 @@
 package aj8gh.gameoflife.seeder;
 
 import aj8gh.gameoflife.domain.Cell;
-import lombok.Setter;
+import lombok.Getter;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
-@Setter
+@Getter
 public class FileSeeder extends AbstractSeeder {
+    private static final String COMMA_DELIMITER = ",";
+    private final Set<String> files;
     private final String seedFilePath;
     private String seedFileName;
 
@@ -21,6 +22,7 @@ public class FileSeeder extends AbstractSeeder {
         this.columns = columns;
         this.seedFilePath = seedFilePath;
         this.seedFileName = seedFileName;
+        this.files = cacheFileNames();
     }
 
     public List<List<Cell>> seed() {
@@ -33,13 +35,20 @@ public class FileSeeder extends AbstractSeeder {
         return seed;
     }
 
+    public void setSeedFileName(String seedFileName) {
+        if (!files.contains(seedFileName)) {
+            throw new IllegalArgumentException("Non-existent file: " + seedFileName);
+        }
+        this.seedFileName = seedFileName;
+    }
+
     private List<Integer> deserialize() {
         List<Integer> seed = new ArrayList<>();
         try (var reader = new BufferedReader(
                 new FileReader(seedFilePath + seedFileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] splitLine = line.split(",");
+                String[] splitLine = line.split(COMMA_DELIMITER);
                 seed.add(Integer.valueOf(splitLine[0]));
                 seed.add(Integer.valueOf(splitLine[1]));
             }
@@ -47,5 +56,11 @@ public class FileSeeder extends AbstractSeeder {
             e.printStackTrace();
         }
         return seed;
+    }
+
+    private Set<String> cacheFileNames() {
+        File directory = new File(seedFilePath);
+        return new HashSet<>(Arrays.asList(
+                Objects.requireNonNull(directory.list())));
     }
 }

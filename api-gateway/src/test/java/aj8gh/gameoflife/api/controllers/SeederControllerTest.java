@@ -15,8 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.nio.charset.StandardCharsets;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -91,7 +90,6 @@ class SeederControllerTest {
 
         ObjectMapper mapper = new ObjectMapper();
         String request = mapper.writeValueAsString(fileRequest);
-        System.out.println(request);
 
         mockMvc.perform(post("/seeder/file")
                         .contentType(APPLICATION_JSON)
@@ -111,5 +109,26 @@ class SeederControllerTest {
                 .andExpect(status().isBadRequest());
 
         verifyNoInteractions(fileSeeder);
+    }
+
+    @Test
+    void file_NonExistentFile_ReturnsBadRequest() throws Exception {
+        String fileName = "nonExistentFile.csv";
+        doThrow(new IllegalArgumentException())
+                .when(fileSeeder)
+                .setSeedFileName(fileName);
+
+        FileRequest fileRequest = new FileRequest(fileName);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String request = mapper.writeValueAsString(fileRequest);
+        System.out.println(request);
+
+        mockMvc.perform(post("/seeder/file")
+                        .contentType(APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isBadRequest());
+
+        verify(fileSeeder).setSeedFileName(fileName);
     }
 }

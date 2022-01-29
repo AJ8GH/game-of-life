@@ -1,23 +1,28 @@
 package aj8gh.gameoflife.seeder;
 
 import aj8gh.gameoflife.domain.Cell;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FileSeederTest {
-    @Test
-    void seed() {
+    private FileSeeder fileSeeder;
+
+    @BeforeEach
+    void setUp() {
         String seedFilePath = "src/test/resources/";
         String seedFileName = "test_seed.csv";
         int rows = 3;
         int columns = 3;
-        Seeder fileSeeder = new FileSeeder(rows, columns, seedFilePath, seedFileName);
+        fileSeeder = new FileSeeder(rows, columns, seedFilePath, seedFileName);
+    }
 
+    @Test
+    void seed() {
         List<List<Cell>> seed = fileSeeder.seed();
 
         assertEquals(3, seed.size());
@@ -29,5 +34,19 @@ public class FileSeederTest {
         assertEquals(3, seed.stream()
                 .flatMap(Collection::stream)
                 .filter(Cell::isAlive).count());
+    }
+
+    @Test
+    void setSeedFileName_WhenFileExists_SetsNewFileName() {
+        String fileName = "test_seed.csv";
+        fileSeeder.setSeedFileName(fileName);
+        assertEquals(fileName, fileSeeder.getSeedFileName());
+    }
+
+    @Test
+    void setSeedFileName_WhenNoFileExists_ThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            fileSeeder.setSeedFileName("bad_file.csv");
+        });
     }
 }
