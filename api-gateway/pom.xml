@@ -3,32 +3,28 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <artifactId>api-gateway</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>api-gateway</name>
+    <description>Rest API for Game of Life</description>
+
     <parent>
         <artifactId>game-of-life</artifactId>
         <groupId>aj8gh</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>api-gateway</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>api-gateway</name>
-    <description>Rest API for Game of Life</description>
-
-    <properties>
-        <java.version>11</java.version>
-    </properties>
-
     <dependencies>
         <dependency>
-            <groupId>aj8gh</groupId>
-            <artifactId>api-client</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>${groupId}</groupId>
+            <artifactId>${apiClient.artifactId}</artifactId>
+            <version>${apiClient.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>aj8gh</groupId>
-            <artifactId>application</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>${groupId}</groupId>
+            <artifactId>${application.artifactId}</artifactId>
+            <version>${application.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -38,7 +34,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.7</version>
+                <version>${jacoco.version}</version>
                 <executions>
                     <execution>
                         <id>default-prepare-agent</id>

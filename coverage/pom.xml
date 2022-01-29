@@ -2,36 +2,37 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>game-of-life</artifactId>
-        <groupId>aj8gh</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>coverage</artifactId>
     <name>coverage</name>
 
+    <parent>
+        <artifactId>game-of-life</artifactId>
+        <groupId>aj8gh</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <dependencies>
         <dependency>
-            <groupId>aj8gh</groupId>
-            <artifactId>launcher</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>${groupId}</groupId>
+            <artifactId>${launcher.artifactId}</artifactId>
+            <version>${launcher.version}</version>
         </dependency>
         <dependency>
-            <groupId>aj8gh</groupId>
-            <artifactId>application</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>${groupId}</groupId>
+            <artifactId>${application.artifactId}</artifactId>
+            <version>${application.version}</version>
         </dependency>
         <dependency>
-            <groupId>aj8gh</groupId>
-            <artifactId>api-client</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>${groupId}</groupId>
+            <artifactId>${apiClient.artifactId}</artifactId>
+            <version>${apiClient.version}</version>
         </dependency>
         <dependency>
-            <groupId>aj8gh</groupId>
-            <artifactId>api-gateway</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>${groupId}</groupId>
+            <artifactId>${apiGateway.artifactId}</artifactId>
+            <version>${apiGateway.version}</version>
         </dependency>
     </dependencies>
 
@@ -40,7 +41,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.7</version>
+                <version>${jacoco.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -58,9 +59,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
 </project>
