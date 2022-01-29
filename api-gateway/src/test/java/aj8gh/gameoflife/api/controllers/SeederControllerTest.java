@@ -1,7 +1,11 @@
 package aj8gh.gameoflife.api.controllers;
 
+import aj8gh.gameoflife.api.domain.FileRequest;
 import aj8gh.gameoflife.application.Game;
-import aj8gh.gameoflife.seeder.Seeder;
+import aj8gh.gameoflife.seeder.FileSeeder;
+import aj8gh.gameoflife.seeder.RandomSeeder;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -17,6 +21,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Slf4j
 class SeederControllerTest {
     private static final MediaType APPLICATION_JSON = new MediaType(
             MediaType.APPLICATION_JSON.getType(),
@@ -24,9 +29,9 @@ class SeederControllerTest {
             StandardCharsets.UTF_8);
 
     @Mock
-    private Seeder randomSeeder;
+    private RandomSeeder randomSeeder;
     @Mock
-    private Seeder fileSeeder;
+    private FileSeeder fileSeeder;
     @Mock
     private Game game;
     private MockMvc mockMvc;
@@ -34,14 +39,18 @@ class SeederControllerTest {
     @BeforeEach
     void setUp() {
         openMocks(this);
-        SeederController controller = new SeederController(randomSeeder, fileSeeder, game);
+        SeederController controller = new SeederController(
+                randomSeeder,
+                fileSeeder,
+                game,
+                new ObjectMapper()
+        );
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     void type_Random_SetsRandomSeeder() throws Exception {
         mockMvc.perform(post("/seeder/type")
-                        .contentType(APPLICATION_JSON)
                         .header("Type", "RANDOM"))
                 .andExpect(status().isOk());
 
@@ -51,7 +60,6 @@ class SeederControllerTest {
     @Test
     void type_File_SetsFileSeeder() throws Exception {
         mockMvc.perform(post("/seeder/type")
-                        .contentType(APPLICATION_JSON)
                         .header("Type", "FILE"))
                 .andExpect(status().isOk());
 
@@ -61,7 +69,6 @@ class SeederControllerTest {
     @Test
     void type_InvalidType_Returns400() throws Exception {
         mockMvc.perform(post("/seeder/type")
-                        .contentType(APPLICATION_JSON)
                         .header("Type", "badHeader"))
                 .andExpect(status().isBadRequest());
 
@@ -71,10 +78,38 @@ class SeederControllerTest {
     @Test
     void type_MissingTypeHeader_Returns400() throws Exception {
         mockMvc.perform(post("/seeder/type")
-                        .contentType(APPLICATION_JSON)
                         .header("badTypeHeader", "RANDOM"))
                 .andExpect(status().isBadRequest());
 
         verifyNoInteractions(game);
+    }
+
+    @Test
+    void file_Success_SetsNewFileValue() throws Exception {
+        String fileName = "hwss.csv";
+        FileRequest fileRequest = new FileRequest(fileName);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String request = mapper.writeValueAsString(fileRequest);
+        System.out.println(request);
+
+        mockMvc.perform(post("/seeder/file")
+                        .contentType(APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isOk());
+
+        verify(fileSeeder).setSeedFileName(fileName);
+    }
+
+    @Test
+    void file_BadJsonBody_ReturnsBadRequest() throws Exception {
+        String request = "{bad json: '400'}}";
+
+        mockMvc.perform(post("/seeder/file")
+                        .contentType(APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(fileSeeder);
     }
 }

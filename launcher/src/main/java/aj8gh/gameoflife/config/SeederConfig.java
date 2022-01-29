@@ -34,23 +34,23 @@ public class SeederConfig {
     @Qualifier("seeder")
     public Seeder seeder() {
         return seedFromFile ?
-                new FileSeeder(rows, columns, resolveFilePath()) :
+                new FileSeeder(rows, columns, resolveFilePath(), seedFile) :
                 new RandomSeeder(rows, columns);
     }
 
     @Bean("randomSeeder")
-    public Seeder randomSeeder() {
+    public RandomSeeder randomSeeder() {
         return new RandomSeeder(rows, columns);
     }
 
     @Bean("fileSeeder")
-    public Seeder fileSeeder() {
-        return new FileSeeder(rows, columns, resolveFilePath());
+    public FileSeeder fileSeeder() {
+        return new FileSeeder(rows, columns, resolveFilePath(), seedFile);
     }
 
     private String resolveFilePath() {
         return USER_DIR.endsWith(seedModule) ?
-                USER_DIR + seedFilePath + seedFile :
-                USER_DIR + seedModule + seedFilePath + seedFile;
+                USER_DIR + seedFilePath :
+                USER_DIR + seedModule + seedFilePath;
     }
 }

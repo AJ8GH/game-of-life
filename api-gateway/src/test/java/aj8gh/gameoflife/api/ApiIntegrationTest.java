@@ -33,7 +33,7 @@ public class ApiIntegrationTest {
     }
 
     @Test
-    void queuedGameStateReturnedBySend() throws JsonProcessingException {
+    void queue_Dequeue_GameStateReturned() throws JsonProcessingException {
         stubFor(post(urlEqualTo("/queue")).willReturn(ok()));
         String requestBody = mapper.writeValueAsString(gameState);
 

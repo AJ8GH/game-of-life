@@ -28,7 +28,7 @@ public class GameTest {
     @BeforeEach
     void setUp() {
         openMocks(this);
-        game = new Game(ui, grid, TICK_DURATION_MILLIS, seeder);
+        game = new Game(ui, grid, seeder, TICK_DURATION_MILLIS);
     }
 
     @Test
@@ -110,5 +110,12 @@ public class GameTest {
 
         verify(grid).setGrid(seed);
         assertFalse(game.isRunning());
+    }
+
+    @Test
+    void setTickDuration_NegativeArgument_ThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+                game.setTickDuration(-999);
+        });
     }
 }

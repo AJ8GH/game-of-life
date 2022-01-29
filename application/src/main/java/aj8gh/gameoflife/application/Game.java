@@ -4,6 +4,7 @@ import aj8gh.gameoflife.domain.Grid;
 import aj8gh.gameoflife.seeder.Seeder;
 import aj8gh.gameoflife.ui.UI;
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,18 +16,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static java.lang.Thread.sleep;
 
 @AllArgsConstructor
+@Setter
 public class Game {
     private static final Logger LOG = LogManager.getLogger(Game.class.getName());
 
     private final UI ui;
     private final Grid grid;
-    private final int tickDuration;
 
     private final Executor executor = Executors.newFixedThreadPool(6);
     private final AtomicInteger generation = new AtomicInteger(0);
     private final AtomicBoolean running = new AtomicBoolean(false);
 
     private Seeder seeder;
+    private int tickDuration;
 
     public void run() {
         if (!running.get()) {
@@ -74,24 +76,27 @@ public class Game {
         LOG.info("*** Game Reset ***");
     }
 
-    public Grid getGrid() {
-        return grid;
+    public void setTickDuration(int tickDuration) {
+        if (tickDuration < 0) {
+            throw new IllegalArgumentException("Tick Duration must be >= 0");
+        }
+        this.tickDuration = tickDuration;
     }
 
-    public void setSeeder(Seeder seeder) {
-        this.seeder = seeder;
+    public Grid getGrid() {
+        return grid;
     }
 
     public int getGeneration() {
         return generation.get();
     }
 
-    public long population() {
-        return grid.population();
-    }
-
     public boolean isRunning() {
         return running.get();
+    }
+
+    public long population() {
+        return grid.population();
     }
 
     private boolean extinct() {

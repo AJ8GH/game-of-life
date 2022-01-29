@@ -12,10 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FileSeederTest {
     @Test
     void seed() {
-        String seedFilePath = "src/test/resources/test_seed.csv";
+        String seedFilePath = "src/test/resources/";
+        String seedFileName = "test_seed.csv";
         int rows = 3;
         int columns = 3;
-        Seeder fileSeeder = new FileSeeder(rows, columns, seedFilePath);
+        Seeder fileSeeder = new FileSeeder(rows, columns, seedFilePath, seedFileName);
 
         List<List<Cell>> seed = fileSeeder.seed();
 

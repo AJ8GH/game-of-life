@@ -1,6 +1,7 @@
 package aj8gh.gameoflife.seeder;
 
 import aj8gh.gameoflife.domain.Cell;
+import lombok.Setter;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,13 +10,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Setter
 public class FileSeeder extends AbstractSeeder {
     private final String seedFilePath;
+    private String seedFileName;
 
-    public FileSeeder(int rows, int columns, String seedFilePath) {
+    public FileSeeder(int rows, int columns,
+                      String seedFilePath, String seedFileName) {
         this.rows = rows;
         this.columns = columns;
         this.seedFilePath = seedFilePath;
+        this.seedFileName = seedFileName;
     }
 
     public List<List<Cell>> seed() {
@@ -30,7 +35,8 @@ public class FileSeeder extends AbstractSeeder {
 
     private List<Integer> deserialize() {
         List<Integer> seed = new ArrayList<>();
-        try (var reader = new BufferedReader(new FileReader(seedFilePath))) {
+        try (var reader = new BufferedReader(
+                new FileReader(seedFilePath + seedFileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] splitLine = line.split(",");

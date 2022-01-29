@@ -8,16 +8,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
 public class GameController {
-
     private static final Logger LOG = LogManager.getLogger(GameController.class.getName());
+
     private static final String START_ENDPOINT = "/game/start";
     private static final String STOP_ENDPOINT = "/game/stop";
     private static final String RESET_ENDPOINT = "/game/reset";
+    private static final String SPEED_ENDPOINT = "/game/speed";
 
     private final Game game;
 
@@ -53,5 +55,18 @@ public class GameController {
         LOG.info("Request received at {}", RESET_ENDPOINT);
         game.reset();
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @PostMapping(value = SPEED_ENDPOINT)
+    public ResponseEntity<String> speed(@RequestParam("millis") int millis) {
+        LOG.info("Value {} received at {}", millis, SPEED_ENDPOINT);
+        try {
+            game.setTickDuration(millis);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            LOG.error("Negative param {} passed to {}", millis, SPEED_ENDPOINT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }
