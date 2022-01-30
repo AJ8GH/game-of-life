@@ -15,12 +15,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class GameControllerTest {
     @Mock
     private Game game;
+    @Mock
+    private QueueController queueController;
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
         openMocks(this);
-        GameController controller = new GameController(game);
+        GameController controller = new GameController(queueController, game);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -47,6 +49,7 @@ public class GameControllerTest {
         mockMvc.perform(post("/game/reset"))
                 .andExpect(status().isOk());
 
+        verify(queueController).clear();
         verify(game).reset();
     }
 

@@ -6,10 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -21,6 +18,7 @@ public class GameController {
     private static final String RESET_ENDPOINT = "/game/reset";
     private static final String SPEED_ENDPOINT = "/game/speed";
 
+    private final QueueController queueController;
     private final Game game;
 
     @CrossOrigin
@@ -51,9 +49,12 @@ public class GameController {
 
     @CrossOrigin
     @PostMapping(value = RESET_ENDPOINT)
-    public ResponseEntity<String> reset() {
+    public ResponseEntity<Void> reset() {
         LOG.info("Request received at {}", RESET_ENDPOINT);
         game.reset();
+        synchronized (queueController) {
+            queueController.clear();
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

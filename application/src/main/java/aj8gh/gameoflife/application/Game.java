@@ -2,7 +2,6 @@ package aj8gh.gameoflife.application;
 
 import aj8gh.gameoflife.domain.Grid;
 import aj8gh.gameoflife.seeder.Seeder;
-import aj8gh.gameoflife.ui.UI;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +11,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 import static java.lang.Thread.sleep;
 
@@ -20,12 +20,11 @@ import static java.lang.Thread.sleep;
 public class Game {
     private static final Logger LOG = LogManager.getLogger(Game.class.getName());
 
-    private final UI ui;
-    private final Grid grid;
-
     private final Executor executor = Executors.newFixedThreadPool(6);
     private final AtomicInteger generation = new AtomicInteger(0);
     private final AtomicBoolean running = new AtomicBoolean(false);
+    private final Consumer<Game> consumerAdaptor;
+    private final Grid grid;
 
     private Seeder seeder;
     private int tickDuration;
@@ -39,7 +38,7 @@ public class Game {
         }
         executor.execute(() -> {
             while (running.get()) {
-                ui.accept(this);
+                consumerAdaptor.accept(this);
                 if (extinct()) {
                     running.getAndSet(false);
                     break;
@@ -53,9 +52,9 @@ public class Game {
         if (running.get()) {
             this.running.getAndSet(false);
             LOG.info("*** Game Stopped ***");
-        } else {
-            throw new IllegalStateException("Game already stopped");
+            return;
         }
+        throw new IllegalStateException("Game already stopped");
     }
 
     private void tick() {
@@ -69,10 +68,11 @@ public class Game {
     }
 
     public void reset() {
-        if (isRunning()) {
-            stop();
+        synchronized (this) {
+            if (isRunning()) stop();
         }
         grid.setGrid(seeder.seed());
+        generation.getAndSet(0);
         LOG.info("*** Game Reset ***");
     }
 

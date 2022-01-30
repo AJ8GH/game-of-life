@@ -1,4 +1,4 @@
-package aj8gh.gameoflife.ui;
+package aj8gh.gameoflife.consumer;
 
 import lombok.RequiredArgsConstructor;
 import aj8gh.gameoflife.apiclient.ApiClient;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class Web implements UI {
+public class ApiConsumer implements UiConsumer {
     private final ApiClient client;
 
     public void accept(Game game) {

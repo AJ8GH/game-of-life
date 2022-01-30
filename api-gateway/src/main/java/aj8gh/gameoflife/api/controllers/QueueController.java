@@ -8,13 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,13 +19,15 @@ public class QueueController {
 
     private static final String ENQUEUE_ENDPOINT = "/queue/enqueue";
     private static final String DEQUEUE_ENDPOINT = "/queue/dequeue";
+    private static final String CLEAR_ENDPOINT = "/queue/clear";
+    private static final String DEQUEUE_ALL_ENDPOINT = "/queue/dequeue/all";
     private static final String APPLICATION_JSON = "application/json";
 
     private final Queue<GameState> queue = new LinkedList<>();
     private final ObjectMapper objectMapper;
 
     @PostMapping(value = ENQUEUE_ENDPOINT, consumes = APPLICATION_JSON)
-    public ResponseEntity<String> enqueue(@RequestBody String body) {
+    public ResponseEntity<Void> enqueue(@RequestBody String body) {
         try {
             GameState gameState = objectMapper.readValue(body, GameState.class);
             LOG.info("Request received at {}: {}", ENQUEUE_ENDPOINT, gameState);
@@ -50,5 +48,22 @@ public class QueueController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(queue.remove(), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @DeleteMapping(value = CLEAR_ENDPOINT)
+    public ResponseEntity<Void> clear() {
+        LOG.info("Request received at {}", CLEAR_ENDPOINT);
+        queue.clear();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = DEQUEUE_ALL_ENDPOINT)
+    public ResponseEntity<Collection<GameState>> dequeueAll() {
+        List<GameState> response = new ArrayList<>(queue);
+        queue.clear();
+        LOG.info("Request received at {}", DEQUEUE_ALL_ENDPOINT);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

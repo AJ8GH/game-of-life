@@ -3,12 +3,12 @@ package aj8gh.gameoflife.application;
 import aj8gh.gameoflife.domain.Cell;
 import aj8gh.gameoflife.domain.Grid;
 import aj8gh.gameoflife.seeder.Seeder;
-import aj8gh.gameoflife.ui.UI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -21,14 +21,14 @@ public class GameTest {
     @Mock
     private Grid grid;
     @Mock
-    private UI ui;
+    private Consumer<Game> consumerAdapter;
     @Mock
     private Seeder seeder;
 
     @BeforeEach
     void setUp() {
         openMocks(this);
-        game = new Game(ui, grid, seeder, TICK_DURATION_MILLIS);
+        game = new Game(consumerAdapter, grid, seeder, TICK_DURATION_MILLIS);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class GameTest {
 
         Thread.sleep(TICK_DURATION_MILLIS * 10);
         verify(grid, times(4)).tick();
-        verify(ui, times(5)).accept(game);
+        verify(consumerAdapter, times(5)).accept(game);
         assertEquals(4, game.getGeneration());
 
         assertFalse(game.isRunning());
@@ -109,13 +109,14 @@ public class GameTest {
         game.reset();
 
         verify(grid).setGrid(seed);
+        assertEquals(0, game.getGeneration());
         assertFalse(game.isRunning());
     }
 
     @Test
     void setTickDuration_NegativeArgument_ThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> {
-                game.setTickDuration(-999);
+            game.setTickDuration(-999);
         });
     }
 }

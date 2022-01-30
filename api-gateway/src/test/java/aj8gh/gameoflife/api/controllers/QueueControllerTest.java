@@ -11,7 +11,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -22,12 +23,13 @@ class QueueControllerTest {
             StandardCharsets.UTF_8);
 
     private ObjectMapper mapper;
+    private QueueController controller;
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
         mapper = new ObjectMapper();
-        QueueController controller = new QueueController(mapper);
+        controller = new QueueController(mapper);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -53,7 +55,8 @@ class QueueControllerTest {
         mockMvc.perform(post("/queue/dequeue")
                 .contentType(APPLICATION_JSON)
                 .content("{}"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().string(requestBody));
     }
 
     @Test
@@ -76,6 +79,53 @@ class QueueControllerTest {
                 .contentType(APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @Order(5)
+    void clear() throws Exception {
+        String requestBody = mapper.writeValueAsString(getRequestBody());
+
+        mockMvc.perform(post("/queue/enqueue")
+                            .contentType(APPLICATION_JSON)
+                            .content(requestBody))
+                    .andExpect(status().isOk());
+
+        mockMvc.perform(delete("/queue/clear")
+                        .contentType(APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/queue/dequeue")
+                        .contentType(APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Order(6)
+    void dequeueAll() throws Exception {
+        String requestBody = mapper.writeValueAsString(getRequestBody());
+        String expectedResponse = mapper.writeValueAsString(List.of(
+                getRequestBody(), getRequestBody(), getRequestBody()));
+
+        for (int i = 0; i < 3; i++) {
+            mockMvc.perform(post("/queue/enqueue")
+                            .contentType(APPLICATION_JSON)
+                            .content(requestBody))
+                    .andExpect(status().isOk());
+        }
+
+        mockMvc.perform(get("/queue/dequeue/all")
+                        .contentType(APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(content().string(expectedResponse));
+
+        mockMvc.perform(post("/queue/dequeue")
+                        .contentType(APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isNotFound());
     }
 
     private GameState getRequestBody() {

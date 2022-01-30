@@ -1,4 +1,4 @@
-package aj8gh.gameoflife.ui;
+package aj8gh.gameoflife.consumer;
 
 import aj8gh.gameoflife.apiclient.ApiClient;
 import aj8gh.gameoflife.apiclient.domain.GameState;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
-class WebTest {
+class ApiConsumerTest {
     @Mock
     ApiClient apiClient;
     @Mock
@@ -39,8 +39,8 @@ class WebTest {
         ));
         when(game.getGrid()).thenReturn(grid);
 
-        UI ui = new Web(apiClient);
-        ui.accept(game);
+        UiConsumer uiConsumer = new ApiConsumer(apiClient);
+        uiConsumer.accept(game);
 
         GameState expectedArgument = convert(game);
         verify(apiClient).enqueue(expectedArgument);

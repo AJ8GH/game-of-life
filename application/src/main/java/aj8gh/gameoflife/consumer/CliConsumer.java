@@ -1,10 +1,10 @@
-package aj8gh.gameoflife.ui;
+package aj8gh.gameoflife.consumer;
 
 import lombok.AllArgsConstructor;
 import aj8gh.gameoflife.application.Game;
 
 @AllArgsConstructor
-public class Terminal implements UI {
+public class CliConsumer implements UiConsumer {
     private static final String LOG_MESSAGE = "Generation: %s, Population: %s\n";
     private boolean info;
 

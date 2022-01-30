@@ -1,4 +1,4 @@
-package aj8gh.gameoflife.ui;
+package aj8gh.gameoflife.consumer;
 
 import aj8gh.gameoflife.application.Game;
 import aj8gh.gameoflife.domain.Grid;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
-class TerminalTest {
+class CliConsumerTest {
     private static final String ACTUAL_OUTPUT = "Mock Output";
     private static final String EXPECTED_OUTPUT = "Mock Output\n";
     private static final String INFO_OUTPUT = "Generation: 198, Population: 50\n";
@@ -43,11 +43,11 @@ class TerminalTest {
 
     @Test
     void accept_LogInfoFalse() {
-        UI ui = new Terminal(false);
+        UiConsumer uiConsumer = new CliConsumer(false);
         when(game.getGrid()).thenReturn(grid);
         when(grid.toString()).thenReturn(ACTUAL_OUTPUT);
 
-        ui.accept(game);
+        uiConsumer.accept(game);
 
         verify(game).getGrid();
         assertEquals(EXPECTED_OUTPUT, out.toString());
@@ -55,13 +55,13 @@ class TerminalTest {
 
     @Test
     void accept_LogInfoTrue() {
-        UI ui = new Terminal(true);
+        UiConsumer uiConsumer = new CliConsumer(true);
         when(game.getGrid()).thenReturn(grid);
         when(grid.toString()).thenReturn(ACTUAL_OUTPUT);
         when(game.population()).thenReturn(50L);
         when(game.getGeneration()).thenReturn(198);
 
-        ui.accept(game);
+        uiConsumer.accept(game);
 
         verify(game).getGrid();
         assertEquals(EXPECTED_OUTPUT + INFO_OUTPUT, out.toString());
