@@ -5,10 +5,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
 
+import static org.springframework.context.annotation.ComponentScan.Filter;
+
 @SpringBootApplication
+@ComponentScan(excludeFilters = @Filter(RestController.class))
 public class GameOfLifeApplication {
     private static final Logger LOG = LogManager.getLogger(GameOfLifeApplication.class.getName());
     private static final String PROFILE = getActiveProfile();

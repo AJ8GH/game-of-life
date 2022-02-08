@@ -1,11 +1,10 @@
-package aj8gh.gameoflife.api;
+package aj8gh.gameoflife.api.controllers;
 
-import aj8gh.gameoflife.api.controllers.QueueController;
+import aj8gh.gameoflife.apiclient.domain.Cell;
+import aj8gh.gameoflife.apiclient.domain.GameState;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import aj8gh.gameoflife.apiclient.domain.Cell;
-import aj8gh.gameoflife.apiclient.domain.GameState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +38,7 @@ public class ApiIntegrationTest {
 
         queueController.enqueue(requestBody);
 
-        GameState dequeued = queueController.dequeue("{}").getBody();
+        GameState dequeued = queueController.dequeue().getBody();
         assertEquals(gameState, dequeued);
     }
 }

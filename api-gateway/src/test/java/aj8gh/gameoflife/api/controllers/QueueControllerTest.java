@@ -36,9 +36,7 @@ class QueueControllerTest {
     @Test
     @Order(1)
     void dequeue_NotFound() throws Exception {
-        mockMvc.perform(post("/queue/dequeue")
-                .contentType(APPLICATION_JSON)
-                .content("{}"))
+        mockMvc.perform(get("/queue/dequeue"))
                 .andExpect(status().isNotFound());
     }
 
@@ -52,9 +50,7 @@ class QueueControllerTest {
                 .content(requestBody))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(post("/queue/dequeue")
-                .contentType(APPLICATION_JSON)
-                .content("{}"))
+        mockMvc.perform(get("/queue/dequeue"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(requestBody));
     }
@@ -96,9 +92,7 @@ class QueueControllerTest {
                         .content(requestBody))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(post("/queue/dequeue")
-                        .contentType(APPLICATION_JSON)
-                        .content("{}"))
+        mockMvc.perform(get("/queue/dequeue"))
                 .andExpect(status().isNotFound());
     }
 
@@ -117,14 +111,11 @@ class QueueControllerTest {
         }
 
         mockMvc.perform(get("/queue/dequeue/all")
-                        .contentType(APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isOk())
                 .andExpect(content().string(expectedResponse));
 
-        mockMvc.perform(post("/queue/dequeue")
-                        .contentType(APPLICATION_JSON)
-                        .content("{}"))
+        mockMvc.perform(get("/queue/dequeue"))
                 .andExpect(status().isNotFound());
     }
 

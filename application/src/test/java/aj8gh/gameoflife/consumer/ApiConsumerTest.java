@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.verify;
@@ -39,8 +40,8 @@ class ApiConsumerTest {
         ));
         when(game.getGrid()).thenReturn(grid);
 
-        UiConsumer uiConsumer = new ApiConsumer(apiClient);
-        uiConsumer.accept(game);
+        Consumer<Game> apiConsumer = new ApiConsumer(apiClient);
+        apiConsumer.accept(game);
 
         GameState expectedArgument = convert(game);
         verify(apiClient).enqueue(expectedArgument);

@@ -3,6 +3,7 @@ package aj8gh.gameoflife.application;
 import aj8gh.gameoflife.domain.Grid;
 import aj8gh.gameoflife.seeder.Seeder;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,8 +16,9 @@ import java.util.function.Consumer;
 
 import static java.lang.Thread.sleep;
 
-@AllArgsConstructor
 @Setter
+@Getter
+@AllArgsConstructor
 public class Game {
     private static final Logger LOG = LogManager.getLogger(Game.class.getName());
 
@@ -24,9 +26,9 @@ public class Game {
     private final AtomicInteger generation = new AtomicInteger(0);
     private final AtomicBoolean running = new AtomicBoolean(false);
     private final Consumer<Game> consumerAdaptor;
+    private final Seeder seeder;
     private final Grid grid;
 
-    private Seeder seeder;
     private int tickDuration;
 
     public void run() {
@@ -58,6 +60,7 @@ public class Game {
     }
 
     private void tick() {
+        if (!isRunning()) return;
         grid.tick();
         generation.incrementAndGet();
         try {
@@ -70,10 +73,12 @@ public class Game {
     public void reset() {
         synchronized (this) {
             if (isRunning()) stop();
+            synchronized (seeder) {
+                grid.setGrid(seeder.seed());
+            }
+            generation.getAndSet(0);
+            LOG.info("*** Game Reset ***");
         }
-        grid.setGrid(seeder.seed());
-        generation.getAndSet(0);
-        LOG.info("*** Game Reset ***");
     }
 
     public void setTickDuration(int tickDuration) {
@@ -83,20 +88,16 @@ public class Game {
         this.tickDuration = tickDuration;
     }
 
-    public Grid getGrid() {
-        return grid;
-    }
-
     public int getGeneration() {
         return generation.get();
     }
 
-    public boolean isRunning() {
-        return running.get();
-    }
-
     public long population() {
         return grid.population();
+    }
+
+    public boolean isRunning() {
+        return running.get();
     }
 
     private boolean extinct() {

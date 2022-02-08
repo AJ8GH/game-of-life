@@ -7,12 +7,14 @@ import aj8gh.gameoflife.apiclient.domain.GameState;
 import aj8gh.gameoflife.application.Game;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class ApiConsumer implements UiConsumer {
+public class ApiConsumer implements Consumer<Game> {
     private final ApiClient client;
 
+    @Override
     public void accept(Game game) {
         GameState gameState = convert(game);
         client.enqueue(gameState);

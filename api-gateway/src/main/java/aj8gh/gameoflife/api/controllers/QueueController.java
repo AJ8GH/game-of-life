@@ -27,22 +27,22 @@ public class QueueController {
     private final ObjectMapper objectMapper;
 
     @PostMapping(value = ENQUEUE_ENDPOINT, consumes = APPLICATION_JSON)
-    public ResponseEntity<Void> enqueue(@RequestBody String body) {
+    ResponseEntity<Void> enqueue(@RequestBody String body) {
         try {
             GameState gameState = objectMapper.readValue(body, GameState.class);
             LOG.info("Request received at {}: {}", ENQUEUE_ENDPOINT, gameState);
             queue.add(gameState);
-            return new ResponseEntity<>(HttpStatus.OK);
         } catch (JsonProcessingException e) {
             LOG.error("Exception processing JSON request body: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @CrossOrigin
-    @PostMapping(value = DEQUEUE_ENDPOINT, consumes = APPLICATION_JSON)
-    public ResponseEntity<GameState> dequeue(@RequestBody String body) {
-        LOG.info("Request received at {}: {}", DEQUEUE_ENDPOINT, body);
+    @GetMapping(value = DEQUEUE_ENDPOINT)
+    ResponseEntity<GameState> dequeue() {
+        LOG.info("Request received at {}", DEQUEUE_ENDPOINT);
         if (queue.isEmpty()) {
             LOG.info("Queue is Empty");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -51,19 +51,23 @@ public class QueueController {
     }
 
     @CrossOrigin
-    @DeleteMapping(value = CLEAR_ENDPOINT)
-    public ResponseEntity<Void> clear() {
-        LOG.info("Request received at {}", CLEAR_ENDPOINT);
-        queue.clear();
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @CrossOrigin
     @GetMapping(value = DEQUEUE_ALL_ENDPOINT)
-    public ResponseEntity<Collection<GameState>> dequeueAll() {
-        List<GameState> response = new ArrayList<>(queue);
-        queue.clear();
+    ResponseEntity<Collection<GameState>> dequeueAll() {
+        List<GameState> response;
+        synchronized (queue) {
+            response = new ArrayList<>(queue);
+            queue.clear();
+        }
         LOG.info("Request received at {}", DEQUEUE_ALL_ENDPOINT);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = CLEAR_ENDPOINT)
+    ResponseEntity<Void> clear() {
+        LOG.info("Request received at {}", CLEAR_ENDPOINT);
+        synchronized (this) {
+            queue.clear();
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

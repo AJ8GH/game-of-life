@@ -28,7 +28,7 @@ public class GameTest {
     @BeforeEach
     void setUp() {
         openMocks(this);
-        game = new Game(consumerAdapter, grid, seeder, TICK_DURATION_MILLIS);
+        game = new Game(consumerAdapter, seeder, grid, TICK_DURATION_MILLIS);
     }
 
     @Test
@@ -95,6 +95,7 @@ public class GameTest {
 
         verify(seeder).seed();
         verify(grid).setGrid(seed);
+        assertEquals(0, game.getGeneration());
         assertFalse(game.isRunning());
     }
 

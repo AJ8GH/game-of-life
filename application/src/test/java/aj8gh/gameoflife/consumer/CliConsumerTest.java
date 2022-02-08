@@ -9,6 +9,7 @@ import org.mockito.Mock;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -43,11 +44,11 @@ class CliConsumerTest {
 
     @Test
     void accept_LogInfoFalse() {
-        UiConsumer uiConsumer = new CliConsumer(false);
+        Consumer<Game> cliConsumer = new CliConsumer(false);
         when(game.getGrid()).thenReturn(grid);
         when(grid.toString()).thenReturn(ACTUAL_OUTPUT);
 
-        uiConsumer.accept(game);
+        cliConsumer.accept(game);
 
         verify(game).getGrid();
         assertEquals(EXPECTED_OUTPUT, out.toString());
@@ -55,13 +56,13 @@ class CliConsumerTest {
 
     @Test
     void accept_LogInfoTrue() {
-        UiConsumer uiConsumer = new CliConsumer(true);
+        Consumer<Game> cliConsumer = new CliConsumer(true);
         when(game.getGrid()).thenReturn(grid);
         when(grid.toString()).thenReturn(ACTUAL_OUTPUT);
         when(game.population()).thenReturn(50L);
         when(game.getGeneration()).thenReturn(198);
 
-        uiConsumer.accept(game);
+        cliConsumer.accept(game);
 
         verify(game).getGrid();
         assertEquals(EXPECTED_OUTPUT + INFO_OUTPUT, out.toString());

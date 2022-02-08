@@ -4,6 +4,7 @@ import aj8gh.gameoflife.domain.Cell;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class FileSeederTest {
     }
 
     @Test
-    void setSeedFileName_WhenFileExists_SetsNewFileName() {
+    void setSeedFileName_WhenFileExists_SetsNewFileName() throws FileNotFoundException {
         String fileName = "test_seed.csv";
         fileSeeder.setSeedFileName(fileName);
         assertEquals(fileName, fileSeeder.getSeedFileName());
@@ -45,7 +46,7 @@ public class FileSeederTest {
 
     @Test
     void setSeedFileName_WhenNoFileExists_ThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(FileNotFoundException.class, () -> {
             fileSeeder.setSeedFileName("bad_file.csv");
         });
     }

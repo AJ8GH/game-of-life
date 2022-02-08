@@ -1,30 +1,31 @@
 package aj8gh.gameoflife.seeder;
 
 import aj8gh.gameoflife.domain.Cell;
-import lombok.Getter;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
-@Getter
+import static aj8gh.gameoflife.seeder.AbstractSeeder.SeederType.FILE;
+
 public class FileSeeder extends AbstractSeeder {
+
     private static final String COMMA_DELIMITER = ",";
+
     private final Set<String> files;
     private final String seedFilePath;
+    private final SeederType type = FILE;
+
     private String seedFileName;
 
-    public FileSeeder(int rows, int columns,
-                      String seedFilePath, String seedFileName) {
-        this.rows = rows;
-        this.columns = columns;
+    public FileSeeder(int rows, int columns, String seedFilePath,
+                      String seedFileName) {
+        super(rows, columns);
         this.seedFilePath = seedFilePath;
         this.seedFileName = seedFileName;
         this.files = cacheFileNames();
     }
 
+    @Override
     public List<List<Cell>> seed() {
         List<Integer> seedData = deserialize();
         List<List<Cell>> seed = generateSeed();
@@ -35,11 +36,20 @@ public class FileSeeder extends AbstractSeeder {
         return seed;
     }
 
-    public void setSeedFileName(String seedFileName) {
+    @Override
+    public SeederType getType() {
+        return type;
+    }
+
+    void setSeedFileName(String seedFileName) throws FileNotFoundException {
         if (!files.contains(seedFileName)) {
-            throw new IllegalArgumentException("Non-existent file: " + seedFileName);
+            throw new FileNotFoundException("Non-existent file: " + seedFileName);
         }
         this.seedFileName = seedFileName;
+    }
+
+    String getSeedFileName() {
+        return seedFileName;
     }
 
     private List<Integer> deserialize() {

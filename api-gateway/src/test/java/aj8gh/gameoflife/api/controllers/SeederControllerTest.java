@@ -1,9 +1,8 @@
 package aj8gh.gameoflife.api.controllers;
 
-import aj8gh.gameoflife.api.domain.FileRequest;
-import aj8gh.gameoflife.application.Game;
-import aj8gh.gameoflife.seeder.FileSeeder;
-import aj8gh.gameoflife.seeder.RandomSeeder;
+import aj8gh.gameoflife.api.domain.SeederConfigRequest;
+import aj8gh.gameoflife.seeder.AbstractSeeder;
+import aj8gh.gameoflife.seeder.SeederAdaptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 
 import static org.mockito.Mockito.*;
@@ -28,22 +28,15 @@ class SeederControllerTest {
             StandardCharsets.UTF_8);
 
     @Mock
-    private RandomSeeder randomSeeder;
-    @Mock
-    private FileSeeder fileSeeder;
-    @Mock
-    private Game game;
+    private SeederAdaptor seederAdaptor;
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
         openMocks(this);
         SeederController controller = new SeederController(
-                randomSeeder,
-                fileSeeder,
-                game,
-                new ObjectMapper()
-        );
+                new ObjectMapper(),
+                seederAdaptor);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -53,7 +46,7 @@ class SeederControllerTest {
                         .header("Type", "RANDOM"))
                 .andExpect(status().isOk());
 
-        verify(game).setSeeder(randomSeeder);
+        verify(seederAdaptor).setType(AbstractSeeder.SeederType.RANDOM);
     }
 
     @Test
@@ -62,7 +55,7 @@ class SeederControllerTest {
                         .header("Type", "FILE"))
                 .andExpect(status().isOk());
 
-        verify(game).setSeeder(fileSeeder);
+        verify(seederAdaptor).setType(AbstractSeeder.SeederType.FILE);
     }
 
     @Test
@@ -71,7 +64,7 @@ class SeederControllerTest {
                         .header("Type", "badHeader"))
                 .andExpect(status().isBadRequest());
 
-        verifyNoInteractions(game);
+        verifyNoInteractions(seederAdaptor);
     }
 
     @Test
@@ -80,55 +73,100 @@ class SeederControllerTest {
                         .header("badTypeHeader", "RANDOM"))
                 .andExpect(status().isBadRequest());
 
-        verifyNoInteractions(game);
+        verifyNoInteractions(seederAdaptor);
     }
 
     @Test
-    void file_Success_SetsNewFileValue() throws Exception {
+    void config_Success_SetsNewFileValue() throws Exception {
         String fileName = "hwss.csv";
-        FileRequest fileRequest = new FileRequest(fileName);
+        SeederConfigRequest seederConfigRequest = SeederConfigRequest.builder()
+                .fileName(fileName)
+                .build();
 
         ObjectMapper mapper = new ObjectMapper();
-        String request = mapper.writeValueAsString(fileRequest);
+        String request = mapper.writeValueAsString(seederConfigRequest);
 
-        mockMvc.perform(post("/seeder/file")
+        mockMvc.perform(post("/seeder/config")
                         .contentType(APPLICATION_JSON)
                         .content(request))
                 .andExpect(status().isOk());
 
-        verify(fileSeeder).setSeedFileName(fileName);
+        verify(seederAdaptor).setFile(fileName);
     }
 
     @Test
-    void file_BadJsonBody_ReturnsBadRequest() throws Exception {
+    void config_BadJsonBody_ReturnsBadRequest() throws Exception {
         String request = "{bad json: '400'}}";
 
-        mockMvc.perform(post("/seeder/file")
+        mockMvc.perform(post("/seeder/config")
                         .contentType(APPLICATION_JSON)
                         .content(request))
                 .andExpect(status().isBadRequest());
 
-        verifyNoInteractions(fileSeeder);
+        verifyNoInteractions(seederAdaptor);
     }
 
     @Test
-    void file_NonExistentFile_ReturnsBadRequest() throws Exception {
+    void config_NonExistentFile_ReturnsBadRequest() throws Exception {
         String fileName = "nonExistentFile.csv";
-        doThrow(new IllegalArgumentException())
-                .when(fileSeeder)
-                .setSeedFileName(fileName);
+        doThrow(new FileNotFoundException())
+                .when(seederAdaptor)
+                .setFile(fileName);
 
-        FileRequest fileRequest = new FileRequest(fileName);
+        SeederConfigRequest seederConfigRequest = SeederConfigRequest.builder()
+                .fileName(fileName)
+                .build();
 
         ObjectMapper mapper = new ObjectMapper();
-        String request = mapper.writeValueAsString(fileRequest);
-        System.out.println(request);
+        String request = mapper.writeValueAsString(seederConfigRequest);
 
-        mockMvc.perform(post("/seeder/file")
+        mockMvc.perform(post("/seeder/config")
                         .contentType(APPLICATION_JSON)
                         .content(request))
                 .andExpect(status().isBadRequest());
 
-        verify(fileSeeder).setSeedFileName(fileName);
+        verify(seederAdaptor).setFile(fileName);
+    }
+
+    @Test
+    void config_SuccessfulRowsAndColumns_SetsRowsAndColumns() throws Exception {
+        SeederConfigRequest seederConfigRequest = SeederConfigRequest.builder()
+                .rows(99)
+                .columns(44)
+                .build();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String request = mapper.writeValueAsString(seederConfigRequest);
+
+        mockMvc.perform(post("/seeder/config")
+                        .contentType(APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isOk());
+
+        verify(seederAdaptor).setRows(99);
+        verify(seederAdaptor).setColumns(44);
+    }
+
+    @Test
+    void config_NegativeRowsAndColumns_ReturnsBadRequest() throws Exception {
+        doThrow(new IllegalArgumentException())
+                .when(seederAdaptor)
+                .setRows(-99);
+        doThrow(new IllegalArgumentException())
+                .when(seederAdaptor)
+                .setColumns(-44);
+
+        SeederConfigRequest seederConfigRequest = SeederConfigRequest.builder()
+                .rows(-99)
+                .columns(-44)
+                .build();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String request = mapper.writeValueAsString(seederConfigRequest);
+
+        mockMvc.perform(post("/seeder/config")
+                        .contentType(APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isBadRequest());
     }
 }

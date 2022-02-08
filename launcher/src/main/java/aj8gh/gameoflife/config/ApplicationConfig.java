@@ -1,15 +1,18 @@
 package aj8gh.gameoflife.config;
 
-import aj8gh.gameoflife.consumer.ConsumerAdaptor;
-import aj8gh.gameoflife.consumer.UiConsumer;
-import lombok.RequiredArgsConstructor;
 import aj8gh.gameoflife.application.Game;
-import aj8gh.gameoflife.domain.Grid;
-import aj8gh.gameoflife.consumer.CliConsumer;
 import aj8gh.gameoflife.consumer.ApiConsumer;
+import aj8gh.gameoflife.consumer.CliConsumer;
+import aj8gh.gameoflife.consumer.ConsumerAdaptor;
+import aj8gh.gameoflife.domain.Grid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Consumer;
 
 @Configuration
 @RequiredArgsConstructor
@@ -34,18 +37,18 @@ public class ApplicationConfig {
     @Bean
     public Game game() {
         return new Game(
-                consumerAdaptor(TOTAL_CONSUMERS),
+                consumerAdaptor(),
+                seederConfig.seederAdaptor(),
                 grid(),
-                seederConfig.seeder(),
-                tickDuration
-        );
+                tickDuration);
     }
 
     @Bean
-    public ConsumerAdaptor consumerAdaptor(int numberOfConsumers) {
-        UiConsumer[] consumers = new UiConsumer[numberOfConsumers];
-        if (cli) consumers[0] = cliConsumer();
-        if (api) consumers[1] = apiConsumer();
+    public ConsumerAdaptor consumerAdaptor() {
+        Set<Consumer<Game>> consumers = new HashSet<>(TOTAL_CONSUMERS);
+        if (cli) consumers.add(cliConsumer());
+        if (api) consumers.add(apiConsumer());
+
         return new ConsumerAdaptor(consumers);
     }
 

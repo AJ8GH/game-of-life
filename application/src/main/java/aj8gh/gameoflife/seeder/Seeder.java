@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface Seeder {
     List<List<Cell>> seed();
+
+    AbstractSeeder.SeederType getType();
 }
