@@ -1,56 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>api-gateway</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>api-gateway</name>
-    <description>Rest API for Game of Life</description>
+  <artifactId>api-gateway</artifactId>
+  <version>1.0-SNAPSHOT</version>
 
-    <parent>
-        <artifactId>game-of-life</artifactId>
-        <groupId>aj8gh</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
+  <parent>
+    <artifactId>game-of-life</artifactId>
+    <groupId>io.github.aj8gh</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
 
-    <dependencies>
-        <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>${apiClient.artifactId}</artifactId>
-            <version>${apiClient.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>${application.artifactId}</artifactId>
-            <version>${application.version}</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <groupId>org.jacoco</groupId>
+      </plugin>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.version}</version>
-                <executions>
-                    <execution>
-                        <id>default-prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <artifactId>${apiClient.artifactId}</artifactId>
+      <groupId>${project.groupId}</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>${application.artifactId}</artifactId>
+      <groupId>${project.groupId}</groupId>
+    </dependency>
+
+    <dependency>
+      <artifactId>junit-jupiter</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>mockito-core</artifactId>
+      <groupId>org.mockito</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>wiremock-jre8</artifactId>
+      <groupId>com.github.tomakehurst</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
+  </dependencies>
+
 </project>
