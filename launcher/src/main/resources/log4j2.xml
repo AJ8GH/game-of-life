@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN" name="game-of-life">
+<Configuration name="game-of-life" status="WARN">
 
-    <Properties>
-        <Property name="APP_LOG_ROOT">./logs</Property>
-        <Property name="PATTERN">%d %c{1.} [%t] %level - %m%n</Property>
-    </Properties>
+  <Appenders>
+    <Console follow="true" name="console" target="SYSTEM_OUT">
+      <PatternLayout pattern="${PATTERN}"/>
+    </Console>
 
-    <Appenders>
-        <Console name="console" target="SYSTEM_OUT" follow="true">
-            <PatternLayout pattern="${PATTERN}"/>
-        </Console>
+    <RollingFile fileName="${sys:APP_LOG_ROOT}/server.log" filePattern="${sys:APP_LOG_ROOT}/server-log-%d{yyyy-MM-dd}.log"
+      name="serverLog">
+      <DefaultRolloverStrategy max="5"/>
+      <PatternLayout pattern="${PATTERN}"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="24" modulate="true"/>
+      </Policies>
+    </RollingFile>
 
-        <RollingFile name="serverLog" fileName="${sys:APP_LOG_ROOT}/server.log"
-                     filePattern="${sys:APP_LOG_ROOT}/server-log-%d{yyyy-MM-dd}.log">
-            <PatternLayout pattern="${PATTERN}"/>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="24" modulate="true"/>
-            </Policies>
-            <DefaultRolloverStrategy max="5"/>
-        </RollingFile>
+    <RollingFile fileName="${sys:APP_LOG_ROOT}/request.log" filePattern="${sys:APP_LOG_ROOT}/request-log-%d{yyyy-MM-dd}.log"
+      name="requestLog">
+      <DefaultRolloverStrategy max="5"/>
+      <PatternLayout pattern="${PATTERN}"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="24" modulate="true"/>
+      </Policies>
+    </RollingFile>
+  </Appenders>
 
-        <RollingFile name="requestLog" fileName="${sys:APP_LOG_ROOT}/request.log"
-                     filePattern="${sys:APP_LOG_ROOT}/request-log-%d{yyyy-MM-dd}.log">
-            <PatternLayout pattern="${PATTERN}"/>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="24" modulate="true"/>
-            </Policies>
-            <DefaultRolloverStrategy max="5"/>
-        </RollingFile>
-    </Appenders>
+  <Loggers>
+    <Logger additivity="false" name="io.github.aj8gh.gameoflife.api.client.ApiClient">
+      <AppenderRef ref="requestLog"/>
+    </Logger>
 
-    <Loggers>
-        <Root level="INFO">
-            <AppenderRef ref="console"/>
-            <AppenderRef ref="serverLog"/>
-        </Root>
+    <Root level="INFO">
+      <AppenderRef ref="console"/>
+      <AppenderRef ref="serverLog"/>
+    </Root>
+  </Loggers>
 
-        <Logger name="aj8gh.gameoflife.apiclient.ApiClient" additivity="false">
-            <AppenderRef ref="requestLog"/>
-        </Logger>
-    </Loggers>
+  <Properties>
+    <Property name="APP_LOG_ROOT">./logs</Property>
+    <Property name="PATTERN">%d %c{1.} [%t] %level - %m%n</Property>
+  </Properties>
 </Configuration>
