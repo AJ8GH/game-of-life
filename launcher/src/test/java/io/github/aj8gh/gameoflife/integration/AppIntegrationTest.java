@@ -2,6 +2,9 @@ package io.github.aj8gh.gameoflife.integration;
 
 import static java.util.stream.Collectors.toMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.http.HttpHeaders.ACCEPT;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import io.github.aj8gh.gameoflife.api.client.ApiClient;
 import io.github.aj8gh.gameoflife.application.Game;
@@ -17,15 +20,13 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.client.RestTemplate;
 
 @ActiveProfiles("test")
 class AppIntegrationTest {
 
-  private static final String SCHEME = "http";
-  private static final String HOST = "localhost";
-  private static final int PORT = 8080;
+  private static final String ROOT_URI = "http://localhost:8080";
   private static final String PATH = "/queue/enqueue";
 
   private static final int ROWS = 10;
@@ -36,9 +37,16 @@ class AppIntegrationTest {
 
   @Test
   void seederAdaptor_setRowsAndColumns_ResetGameGridHasNewSize() {
+    var apiClient = new ApiClient(new RestTemplateBuilder()
+        .rootUri(ROOT_URI)
+        .defaultHeader(CONTENT_TYPE, APPLICATION_JSON.toString())
+        .defaultHeader(ACCEPT, APPLICATION_JSON.toString())
+        .build(),
+        PATH);
+
     var consumerAdaptor = new ConsumerAdaptor(Set.of(
         new CliConsumer(false),
-        new ApiConsumer(new ApiClient(SCHEME, HOST, PORT, PATH, new RestTemplate()))
+        new ApiConsumer(apiClient)
     ));
 
     Seeder randomSeeder = new RandomSeeder(ROWS, COLUMNS);

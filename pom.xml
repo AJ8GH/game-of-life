@@ -42,6 +42,8 @@
     <checkstyle.severity>warning</checkstyle.severity>
     <checkstyle.fail>true</checkstyle.fail>
     <checkstyle.console>true</checkstyle.console>
+    <default.package>${project.groupId}.gameoflife</default.package>
+    <start-class>${default.package}.GameOfLifeApplication</start-class>
 
     <byte-buddy.version>1.12.16</byte-buddy.version>
     <jacoco.version>0.8.8</jacoco.version>
@@ -50,18 +52,75 @@
     <lombok.version>1.18.24</lombok.version>
     <maven.checkstyle.version>3.2.0</maven.checkstyle.version>
     <maven.surefire.version>3.0.0-M5</maven.surefire.version>
+    <maven.assembly.version>3.3.0</maven.assembly.version>
     <mockito.version>4.8.0</mockito.version>
     <slf4j.version>2.0.0</slf4j.version>
     <spring.boot.version>2.7.3</spring.boot.version>
+    <spring.boot.maven.version>2.7.3</spring.boot.maven.version>
     <wiremock-jre8.version>2.32.0</wiremock-jre8.version>
   </properties>
 
   <build>
     <pluginManagement>
       <plugins>
+
         <plugin>
-          <artifactId>spring-boot-maven-plugin</artifactId>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${maven.assembly.version}</version>
+          <configuration>
+            <finalName>game-of-life</finalName>
+            <appendAssemblyId>false</appendAssemblyId>
+            <descriptorRefs>
+              <descriptorRef>jar-with-dependencies</descriptorRef>
+            </descriptorRefs>
+            <archive>
+              <index>true</index>
+              <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                <addClasspath>true</addClasspath>
+                <mainClass>${start-class}</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
+          <executions>
+            <execution>
+              <id>make-assembly</id>
+              <phase>package</phase>
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
           <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>${spring.boot.maven.version}</version>
+          <executions>
+            <execution>
+              <id>repackage</id>
+              <goals>
+                <goal>repackage</goal>
+              </goals>
+              <configuration>
+                <mainClass>${start-class}</mainClass>
+                <executable>true</executable>
+                <finalName>gol</finalName>
+              </configuration>
+            </execution>
+          </executions>
+          <configuration>
+            <excludes>
+              <exclude>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>${coverage.artifactId}</artifactId>
+              </exclude>
+            </excludes>
+            <mainClass>${start-class}</mainClass>
+          </configuration>
         </plugin>
 
         <plugin>

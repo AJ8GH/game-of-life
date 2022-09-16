@@ -8,6 +8,33 @@
 [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) implemented and test
 driven in Java
 
+## Getting Started
+
+### Docker
+1. Start Docker
+2. Build image
+```shell
+docker build .
+```
+3. Run container exposing port 8080 to allow requests to the REST API
+```docker
+docker run -p 8080:8080 <image-id>
+```
+
+### Build & Run Locally
+
+1. Install Java 17
+2. Install Maven 3
+3. Build project:
+```shell
+mvn clean install
+```
+4. Run application jar
+```shell
+java -jar launcher/target/gol.jar
+```
+
+
 ## Rules
 
 The universe of the Game of Life is an infinite,
