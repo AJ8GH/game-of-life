@@ -31,7 +31,6 @@ public class GameController {
   private static final String RESET_ENDPOINT = "/game/reset";
   private static final String CONFIG_ENDPOINT = "/game/config";
   private static final String APPLICATION_JSON = "application/json";
-
   private static final String REQUEST_RECEIVED_MESSAGE = "Request received at {}";
 
   private final Map<ConsumerType, Consumer<Game>> consumerMap;
